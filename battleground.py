@@ -2,6 +2,18 @@ import copy
 
 
 class Battleground(object):
+    def init_from_matrix(self, mat):
+        # TODO: UNFINISHED, SEE INSTRUCTIONS BELOW
+        self.m = len(mat)
+        self.n = len(mat[0])
+        # check input dimensions
+        if any(len(mat[i]) != self.n for i in range(self.m)):
+            raise ValueError("Shape mismatch: all rows in the terrain matrix should have had equal lengths")
+
+        self.terrain = copy.deepcopy(mat)
+        self.fog = [[entry == 1 for entry in row] for row in mat]  # TODO: nothing, this one is done
+        # TODO: need to get a complete terrain from mat using a convex hull algorithm
+
     def __init__(self, terrain, fog):
 
         # the size of the battleground (m * n matrix)
@@ -18,6 +30,17 @@ class Battleground(object):
 
         self.terrain = terrain
         self.fog = fog
+
+    def __str__(self):
+        ret = "<RST Battleground Object: Battleground(\n"
+        ret += "terrain=[\n"
+        for row in self.terrain:
+            ret += str(row) + ",\n"
+        ret = ret[:-2] + "],\nfog=[\n"
+        for row in self.fog:
+            ret += str(row) + ",\n"
+        ret = ret[:-2] + "])>"
+        return ret
 
     def get_view(self, i1=-1, j1=-1, interfere=True, birdseye=True):
         """
