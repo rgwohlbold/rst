@@ -12,9 +12,7 @@ def ccw(p1, p2, p3):
     :param p3: Point(x,y) 3
     :return: >0 if counter-clockwise, <0 if clockwise, =0 if colinear
     """
-    res = (p2[0] - p1[0])*(p3[1] - p1[1]) - (p2[1] - p1[1])*(p3[0] - p1[0])
-    print(p1, p2, p3, res)
-    return res
+    return (p2[0] - p1[0])*(p3[1] - p1[1]) - (p2[1] - p1[1])*(p3[0] - p1[0])
 
 
 def angle(p1, p2):
@@ -52,8 +50,6 @@ def graham_scan(points):
         elif p[1] == smallest[1]:
             if p[0] < smallest[0]:
                 smallest = p
-    for p in points:
-        print(p, angle(p, smallest))
 
     # Sort points by angle over smallest to x-axis
     points.sort(key=lambda x: angle(x, smallest))
