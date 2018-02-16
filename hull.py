@@ -1,9 +1,6 @@
 from math import atan, pi
 
 
-# Three points are a counter-clockwise turn if ccw > 0, clockwise if
-# ccw < 0, and collinear if ccw = 0 because ccw is a determinant that
-# gives twice the signed  area of the triangle formed by p1, p2 and p3.
 def ccw(p1, p2, p3):
     """
     Return if points form a counter-clockwise triangle
