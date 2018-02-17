@@ -1,4 +1,4 @@
-from math import atan, pi
+import math
 
 
 def ccw(p1, p2, p3):
@@ -25,7 +25,7 @@ def angle(p1, p2):
         if dy == 0:
             return 0
         return 90
-    alpha = atan(dy / dx) * 180 / pi
+    alpha = math.atan(dy / dx) * 180 / math.pi
     if alpha < 0:
         alpha = 180 - alpha
     return alpha
@@ -65,5 +65,3 @@ def graham_scan(points):
         else:
             hull.pop()
     return hull
-
-
