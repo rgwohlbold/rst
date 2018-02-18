@@ -68,6 +68,10 @@ def rotate(point, move):
 
     return (point[0] + dx, point[1] + dy)
 
+def dist(p1, p2):
+    dx = p1[0] - p2[0]
+    dy = p1[1] - p2[1]
+    return math.sqrt(dx ** 2 + dy ** 2)
 
 def interpolate(points):
     """
@@ -98,19 +102,27 @@ def interpolate(points):
         # Angle from new point over previous one to current axis
         alpha = axis_angle(p, prev, x_axis=y_axis, right=right)
 
-        # All possible destinations
-        dests = moves(p)
-
-        # Choose the one with the smallest angle (on the outside)
-        angles = list(map(lambda x: axis_angle(x, prev, y_axis, right=not right), dests))
-        dest = dests[angles.index(min(angles))] # Dest with smallest angle
-
         # If alpha = 90, we do not change directions and the same vertex is used twice
         if alpha > 90:
             source = prev_dest
         # If alpha <= 90, change directions and use the vertex twice
         else:
             source = rotate(prev, prev_dest)
+
+        # All possible destinations
+        dests = moves(p)
+
+        # Choose the one with the smallest angle (on the outside)
+        angles = list(map(lambda x: axis_angle(x, prev, y_axis, right=not right), dests))
+        # Dest with smallest angle, when angles are equal the one with smallest distance to source
+        smallest = min(angles)
+        dests_new = []
+        for i,a in enumerate(angles):
+            if a == smallest:
+               dests_new.append(dests[i])
+        dest = sorted(dests_new, key=lambda x: dist(x, source))[0]
+
+        if alpha <= 90:
             y_axis = not y_axis
             if not y_axis:
                 right = not right

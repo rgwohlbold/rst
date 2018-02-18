@@ -28,5 +28,13 @@ class TestEverything(unittest.TestCase):
                           ((-0.5,  2.5), (-2.5,  0.5)),
                           ((-2.5, -0.5), (-0.5, -2.5))])
 
+    def test_interpolate_3(self):
+        points = [(0, 0), (2, 0), (2, 2), (0, 2)]
+        self.assertEqual(interpolate(points),
+                         [(( 0.5, -0.5), ( 2.5, -0.5)),
+                          (( 2.5,  0.5), ( 2.5,  1.5)),
+                          (( 2.5,  2.5), ( 0.5,  2.5)),
+                          ((-0.5,  2.5), (-0.5,  0.5))])
+
 if __name__ == "__main__":
     unittest.main()
