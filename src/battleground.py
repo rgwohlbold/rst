@@ -14,7 +14,7 @@ class Battleground(object):
         self.fog = [[entry == 1 for entry in row] for row in mat]  # TODO: nothing, this one is done
         # TODO: need to get a complete terrain from mat using a convex hull algorithm
 
-    def __init__(self, terrain, fog):
+    def _init_from_terrain_and_fog(self, terrain, fog):
 
         # the size of the battleground (m * n matrix)
         self.m = len(terrain)
@@ -42,7 +42,7 @@ class Battleground(object):
         ret = ret[:-2] + "])>"
         return ret
 
-    def get_view(self, i1=-1, j1=-1, interfere=True, birdseye=True):
+    def get_view(self, i1=-1, j1=-1, interfere=False, birdseye=True):
         """
         get a view of the battleground for a robot at (i, j)
         when (i1, j1) == (-1, -1) by default, return a view without the robot
