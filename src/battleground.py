@@ -2,7 +2,7 @@ import copy
 
 
 class Battleground(object):
-    def init_from_matrix(self, mat):
+    def _init_from_view(self, mat):
         # TODO: UNFINISHED, SEE INSTRUCTIONS BELOW
         self.m = len(mat)
         self.n = len(mat[0])
