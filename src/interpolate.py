@@ -66,7 +66,8 @@ def rotate(point, move):
     elif dx > 0 and dy < 0:
         dy = -dy
 
-    return (point[0] + dx, point[1] + dy)
+    return point[0] + dx, point[1] + dy
+
 
 
 def dist(p1, p2):
