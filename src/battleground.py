@@ -6,13 +6,23 @@ class Battleground(object):
         # TODO: UNFINISHED, SEE INSTRUCTIONS BELOW
         self.m = len(mat)
         self.n = len(mat[0])
+        self.max_h = max(ent for row in mat for ent in row)  # the maximum height
+
         # check input dimensions
         if any(len(mat[i]) != self.n for i in range(self.m)):
             raise ValueError("Shape mismatch: all rows in the terrain matrix should have had equal lengths")
 
         self.terrain = copy.deepcopy(mat)
         self.fog = [[entry == 1 for entry in row] for row in mat]  # TODO: nothing, this one is done
+
         # TODO: need to get a complete terrain from mat using a convex hull algorithm
+        # get coordinates for each height
+        h_coordinates = {h: [] for h in range(3, self.max_h+1)}  # h -> list of coordinates that have height h
+        for r in range(self.m):
+            for c in range(self.n):
+                if mat[r][c] >= 3:
+                    h_coordinates[mat[r][c]].append((r, c))
+
 
     def _init_from_terrain_and_fog(self, terrain, fog):
 

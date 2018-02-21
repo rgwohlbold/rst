@@ -66,12 +66,14 @@ def rotate(point, move):
     elif dx > 0 and dy < 0:
         dy = -dy
 
-    return (point[0] + dx, point[1] + dy)
+    return point[0] + dx, point[1] + dy
+
 
 def dist(p1, p2):
     dx = p1[0] - p2[0]
     dy = p1[1] - p2[1]
     return math.sqrt(dx ** 2 + dy ** 2)
+
 
 def interpolate(points):
     """
