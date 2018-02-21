@@ -44,7 +44,7 @@ def moves(p):
             (p[0] + 0.5, p[1] - 0.5),
             (p[0] - 0.5, p[1] + 0.5),
             (p[0] - 0.5, p[1] - 0.5)]
-
+2
 
 def rotate(point, move):
     """
@@ -68,10 +68,12 @@ def rotate(point, move):
 
     return (point[0] + dx, point[1] + dy)
 
+
 def dist(p1, p2):
     dx = p1[0] - p2[0]
     dy = p1[1] - p2[1]
     return math.sqrt(dx ** 2 + dy ** 2)
+
 
 def interpolate(points):
     """
@@ -108,6 +110,8 @@ def interpolate(points):
         # If alpha <= 90, change directions and use the vertex twice
         else:
             source = rotate(prev, prev_dest)
+            if len(points) == 2:
+                source = rotate(prev, source)
 
         # All possible destinations
         dests = moves(p)

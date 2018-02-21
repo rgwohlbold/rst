@@ -38,6 +38,12 @@ class TestEverything(unittest.TestCase):
                           (( 2.5,  2.5), ( 0.5,  2.5)),
                           ((-0.5,  2.5), (-0.5,  0.5))])
 
+    def test_interpolate_4(self):
+        points = [(0, 0), (2, 0)]
+        self.assertEqual(interpolate(points),
+                         [((0.5, -0.5), (2.5, -0.5)),
+                          ((1.5, 0.5), (0.5, 0.5))])
+
     def test_battleground_1(self):
         view = [
             [1, 1, 0, 1, 1, 1, 1, 1, 0],
