@@ -23,7 +23,6 @@ class Battleground(object):
                 if mat[r][c] >= 3:
                     h_coordinates[mat[r][c]].append((r, c))
 
-
     def _init_from_terrain_and_fog(self, terrain, fog):
 
         # the size of the battleground (m * n matrix)
@@ -87,4 +86,3 @@ class Battleground(object):
                     self.fog[i][j] = False  # clear the fog out of the way
 
         return view
-
