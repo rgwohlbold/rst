@@ -79,5 +79,7 @@ class TestEverything(unittest.TestCase):
         b1._init_from_terrain_and_fog(terrain, fog)
         self.assertEqual(b1.get_view(i1=-1, j1=-1, interfere=False, birdseye=True), view)
 
+
+
 if __name__ == "__main__":
     unittest.main()
