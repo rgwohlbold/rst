@@ -5,6 +5,7 @@ In this algorithm, we assume that all coordinates are in the first quadrant, bec
 coordinate in a 2d array can be perfectly interpreted as (x, y) in the first quadrant. I believe there's an isomorphism.
 
 """
+from scipy.spatial import ConvexHull
 
 
 def get_all_vertices(squares):
@@ -29,8 +30,10 @@ def ccw(p1, p2, p3):
     return (p2[0] - p1[0])*(p3[1] - p1[1]) - (p2[1] - p1[1])*(p3[0] - p1[0])
 
 
-def graham_scan(points):
+def graham_scan_outdated(points):
     # TODO: the problem is with graham scan
+    # TODO: this function is wrong!
+    raise RuntimeError("Do not call this graham scan function! this is wrong!")
     # select the point with the lowest y coordinate
     # if several points have the same y coordinate, select the point with the lowest x coordinate
     lowest = min(points, key=lambda p: (p[1], p[0]))
@@ -47,6 +50,7 @@ def graham_scan(points):
     hull = [lowest, points.pop(0)]
 
     while points:
+        print('hull: {}'.format(hull), 'points: {}'.format(points), sep='\n')
         is_ccw = ccw(hull[-2], hull[-1], points[0])
         if is_ccw == 0:  # three points are collinear
             # select the point with the maximum distance from hull[-2]
@@ -69,3 +73,17 @@ ce1 = [(0, 3), (1, 1), (2, 2), (4, 4), (0, 0), (1, 2), (3, 1), (3, 3), (1, 0), (
 print(graham_scan(deepcopy(ce1)))
 print(hull.graham_scan(deepcopy(ce1)))
 """
+
+
+def graham_scan(points):
+    return [points[v] for v in ConvexHull(points).vertices]
+
+
+# print(graham_scan())
+# dat_1 = [(4, 4), (5, 4), (4, 5), (5, 5), (5, 6), (6, 6), (5, 7), (6, 7), (6, 2), (7, 2), (6, 3), (7, 3)]
+# ans_1 = [(6, 2), (7, 2), (7, 3), (6, 7), (5, 7), (4, 5), (4, 4)]
+# hull_1 = ConvexHull(dat_1)
+# print(hull_1.points)
+# print([dat_1[v] for v in hull_1.vertices])
+
+
