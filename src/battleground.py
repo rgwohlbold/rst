@@ -1,4 +1,6 @@
 import copy
+from convex_hull import get_all_vertices, graham_scan
+from polygon import interpolate
 
 
 class Battleground(object):
@@ -13,7 +15,7 @@ class Battleground(object):
             raise ValueError("Shape mismatch: all rows in the terrain matrix should have had equal lengths")
 
         self.terrain = copy.deepcopy(mat)
-        self.fog = [[entry == 1 for entry in row] for row in mat]  # TODO: nothing, this one is done
+        self.fog = [[entry == 1 for entry in row] for row in mat]
 
         # TODO: need to get a complete terrain from mat using a convex hull algorithm
         # get coordinates for each height
@@ -22,6 +24,30 @@ class Battleground(object):
             for c in range(self.n):
                 if mat[r][c] >= 3:
                     h_coordinates[mat[r][c]].append((r, c))
+
+        # fill in the mountains
+        for h in h_coordinates:
+            hull_verts = graham_scan(get_all_vertices(h_coordinates[h]))  # all vertices of the convex hull
+            mask = interpolate(self.m, self.n, hull_verts, use_wn=True)
+            print("all coordinates for h={}: ".format(h), get_all_vertices(h_coordinates[h]))
+            print("hull coordinates for h={}: ".format(h), hull_verts)
+            # print("hull coordinates 1 for h={}: ".format(h), graham_scan_1(get_all_vertices(h_coordinates[h])))
+            print("WAIT---Printing mask", h)
+            for row in mask:
+                print([int(x) for x in row], end=',\n')
+            print('ended')
+            # import time
+            # time.sleep(1)
+            for r in range(self.m):
+                for c in range(self.n):
+                    if mask[r][c] and self.terrain[r][c] != 2:
+                        self.terrain[r][c] = h
+
+        # remove the remaining fog on the terrain
+        for r in range(self.m):
+            for c in range(self.n):
+                if self.terrain[r][c] == 1:
+                    self.terrain[r][c] = 0
 
     def _init_from_terrain_and_fog(self, terrain, fog):
 

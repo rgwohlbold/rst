@@ -30,6 +30,7 @@ def ccw(p1, p2, p3):
 
 
 def graham_scan(points):
+    # TODO: the problem is with graham scan
     # select the point with the lowest y coordinate
     # if several points have the same y coordinate, select the point with the lowest x coordinate
     lowest = min(points, key=lambda p: (p[1], p[0]))
