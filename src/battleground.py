@@ -4,8 +4,7 @@ from polygon import interpolate
 
 
 class Battleground(object):
-    def _init_from_view(self, mat):
-        # TODO: UNFINISHED, SEE INSTRUCTIONS BELOW
+    def __init__(self, mat):
         self.m = len(mat)
         self.n = len(mat[0])
         self.max_h = max(ent for row in mat for ent in row)  # the maximum height
@@ -17,7 +16,7 @@ class Battleground(object):
         self.terrain = copy.deepcopy(mat)
         self.fog = [[entry == 1 for entry in row] for row in mat]
 
-        # TODO: need to get a complete terrain from mat using a convex hull algorithm
+        # get a complete terrain from mat using a convex hull algorithm
         # get coordinates for each height
         h_coordinates = {h: [] for h in range(3, self.max_h+1)}  # h -> list of coordinates that have height h
         for r in range(self.m):

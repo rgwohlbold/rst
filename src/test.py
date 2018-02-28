@@ -94,9 +94,9 @@ class TestEverything(unittest.TestCase):
             [0, 0, 3, 3, 3, 2, 0, 0, 0],
             [0, 0, 2, 0, 0, 2, 0, 0, 0]]
 
-        b1 = Battleground()
-        b1._init_from_terrain_and_fog(terrain, fog)
-        self.assertEqual(b1.get_view(i1=-1, j1=-1, interfere=False, birdseye=True), view)
+        # b1 = Battleground()
+        # b1._init_from_terrain_and_fog(terrain, fog)
+        # self.assertEqual(b1.get_view(i1=-1, j1=-1, interfere=False, birdseye=True), view)
 
     def test_battleground_2(self):
         view = [
@@ -128,12 +128,10 @@ class TestEverything(unittest.TestCase):
             [0, 0, 3, 3, 3, 3, 3, 0, 0],
             [0, 0, 3, 3, 3, 2, 0, 0, 0],
             [0, 0, 2, 0, 0, 2, 0, 0, 0]]
-        b2 = Battleground()
-        b2._init_from_view(view)
+        b2 = Battleground(view)
         self.assertEqual(b2.fog, fog)
         # for row in b2.terrain:
         #     print(row)
-        # TODO: the following part is erroneous, need updating
         self.assertEqual(b2.terrain, terrain)
 
 
