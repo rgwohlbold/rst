@@ -4,6 +4,7 @@ from convex_hull import graham_scan as graham_scan_t
 from interpolate import interpolate
 from battleground import Battleground
 from polygon import crossing_number, winding_number
+from bresenham import draw_line
 
 
 class TestEverything(unittest.TestCase):
@@ -62,6 +63,22 @@ class TestEverything(unittest.TestCase):
         self.assertEqual(interpolate(points),
                          [((0.5, -0.5), (2.5, -0.5)),
                           ((1.5, 0.5), (0.5, 0.5))])
+
+    def test_bresenham_1(self):
+        points = [(0, 0), (0, 3)]
+        self.assertEqual(draw_line(points[0], points[1]),
+                         [(0, 0),(0, 1),(0, 2),(0, 3)])
+
+    def test_bresenham_2(self):
+        points = [(5, 3), (2, 1)]
+        self.assertEqual(draw_line(points[0], points[1]),
+                         [(2, 1), (3, 2), (4, 2), (5, 3)])
+
+    def test_bresenham_3(self):
+        points = [(1, 0), (10, 5)]
+        self.assertEqual(draw_line(points[0], points[1]),
+                         [(1, 0), (2, 1), (3, 1), (4, 2), (5, 2),
+                          (6, 3), (7, 3), (8, 4), (9, 4), (10, 5)])
 
     def test_battleground_1(self):
         view = [
