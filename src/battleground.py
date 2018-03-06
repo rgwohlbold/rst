@@ -2,6 +2,7 @@ import copy
 from convex_hull import get_all_vertices, graham_scan
 from polygon import interpolate
 
+DEBUG = False
 
 class Battleground(object):
     def __init__(self, mat):
@@ -28,13 +29,14 @@ class Battleground(object):
         for h in h_coordinates:
             hull_verts = graham_scan(get_all_vertices(h_coordinates[h]))  # all vertices of the convex hull
             mask = interpolate(self.m, self.n, hull_verts, use_wn=True)
-            print("all coordinates for h={}: ".format(h), get_all_vertices(h_coordinates[h]))
-            print("hull coordinates for h={}: ".format(h), hull_verts)
-            # print("hull coordinates 1 for h={}: ".format(h), graham_scan_1(get_all_vertices(h_coordinates[h])))
-            print("WAIT---Printing mask", h)
-            for row in mask:
-                print([int(x) for x in row], end=',\n')
-            print('ended')
+            if DEBUG:
+                print("all coordinates for h={}: ".format(h), get_all_vertices(h_coordinates[h]))
+                print("hull coordinates for h={}: ".format(h), hull_verts)
+                #print("hull coordinates 1 for h={}: ".format(h), graham_scan_1(get_all_vertices(h_coordinates[h])))
+                print("WAIT---Printing mask", h)
+                for row in mask:
+                    print([int(x) for x in row], end=',\n')
+                print('ended')
             # import time
             # time.sleep(1)
             for r in range(self.m):
