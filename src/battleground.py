@@ -1,6 +1,8 @@
 import copy
+import display
 from convex_hull import get_all_vertices, graham_scan
 from polygon import interpolate
+
 
 DEBUG = False
 
@@ -68,15 +70,7 @@ class Battleground(object):
         self.fog = fog
 
     def __str__(self):
-        ret = "<RST Battleground Object: Battleground(\n"
-        ret += "terrain=[\n"
-        for row in self.terrain:
-            ret += str(row) + ",\n"
-        ret = ret[:-2] + "],\nfog=[\n"
-        for row in self.fog:
-            ret += str(row) + ",\n"
-        ret = ret[:-2] + "])>"
-        return ret
+        return display.get_display(self.terrain)
 
     def get_view(self, i1=-1, j1=-1, interfere=False, birdseye=True):
         """

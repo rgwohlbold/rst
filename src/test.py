@@ -5,7 +5,7 @@ from interpolate import interpolate
 from battleground import Battleground
 from polygon import crossing_number, winding_number
 from bresenham import draw_line
-
+from robot import Robot
 
 class TestEverything(unittest.TestCase):
     def test_init(self):
@@ -79,6 +79,14 @@ class TestEverything(unittest.TestCase):
         self.assertEqual(draw_line(points[0], points[1]),
                          [(1, 0), (2, 1), (3, 1), (4, 2), (5, 2),
                           (6, 3), (7, 3), (8, 4), (9, 4), (10, 5)])
+
+    def test_robot(self):
+        terrain = [[0,0],
+                   [0,0]]
+        battleground = Battleground(terrain)
+        robot = Robot(battleground)
+        self.assertTrue(robot.dfs())
+        self.assertEqual(robot.moves,2)
 
     def test_battleground_1(self):
         view = [
