@@ -1,7 +1,6 @@
 import unittest
 from hull import graham_scan as graham_scan_r
 from convex_hull import graham_scan as graham_scan_t
-from interpolate import interpolate
 from battleground import Battleground
 from polygon import crossing_number, winding_number
 from bresenham import draw_line
@@ -33,36 +32,6 @@ class TestEverything(unittest.TestCase):
         points = [(0, -2), (0, 0), (-1, 0), (1, 2), (3, 0), (1, 5)]
         res = graham_scan_r(points)
         self.assertEqual(res, [(0, -2), (3, 0), (1, 5), (-1, 0)])
-
-    def test_interpolate_1(self):
-        points = [(0, -2), (3, 0), (1, 5), (-1, 0)]
-        self.assertEqual(interpolate(points),
-                         [(( 0.5, -2.5), ( 3.5, -0.5)),
-                          (( 3.5,  0.5), ( 1.5,  5.5)),
-                          (( 0.5,  5.5), (-1.5,  0.5)),
-                          ((-1.5, -0.5), (-0.5, -2.5))])
-
-    def test_interpolate_2(self):
-        points = [(0, -2), (2, 0), (0, 2), (-2, 0)]
-        self.assertEqual(interpolate(points),
-                         [(( 0.5, -2.5), ( 2.5, -0.5)),
-                          (( 2.5,  0.5), ( 0.5,  2.5)),
-                          ((-0.5,  2.5), (-2.5,  0.5)),
-                          ((-2.5, -0.5), (-0.5, -2.5))])
-
-    def test_interpolate_3(self):
-        points = [(0, 0), (2, 0), (2, 2), (0, 2)]
-        self.assertEqual(interpolate(points),
-                         [(( 0.5, -0.5), ( 2.5, -0.5)),
-                          (( 2.5,  0.5), ( 2.5,  1.5)),
-                          (( 2.5,  2.5), ( 0.5,  2.5)),
-                          ((-0.5,  2.5), (-0.5,  0.5))])
-
-    def test_interpolate_4(self):
-        points = [(0, 0), (2, 0)]
-        self.assertEqual(interpolate(points),
-                         [((0.5, -0.5), (2.5, -0.5)),
-                          ((1.5, 0.5), (0.5, 0.5))])
 
     def test_bresenham_1(self):
         points = [(0, 0), (0, 3)]
