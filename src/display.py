@@ -25,8 +25,13 @@ displaymap = {
 
 
 def display(terrain):
+    print(get_display(terrain))
+
+def get_display(terrain):
+    ret = ""
     for row in terrain:
         for tile in row:
-            print(displaymap[tile],end=" ")
-        print()
-    print(Fore.RESET)
+            ret += displaymap[tile] + " "
+        ret += "\n"
+    ret += Fore.RESET
+    return ret
