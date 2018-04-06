@@ -4,6 +4,9 @@ from colorama import Fore, Back, Style
 init()
 
 displaymap = {
+    # robot
+   -1: Fore.CYAN + "=",
+
     # explored
     0: Fore.RESET + "_",
 
