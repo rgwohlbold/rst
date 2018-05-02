@@ -6,8 +6,15 @@ DEBUG = False
 
 
 class Battleground(object):
-    def __init__(self, mat):
-        self._init_from_view(mat)
+    def __init__(self, view=None, terrain=None, fog=None, m=None, n=None, **kwargs):
+        if view is not None:
+            self._init_from_view(view)
+        elif terrain is not None:
+            self._init_from_terrain_and_fog(terrain, fog)
+        elif m is not None and n is not None:
+            self._init_from_size(m, n)
+        else:
+            print("An uninitialized battleground is created")
 
     def _init_from_view(self, view):
         self.m = len(view)
@@ -30,12 +37,7 @@ class Battleground(object):
 
         # fill the mountains
         for h in h_coordinates:  # iterate over different heights
-            hull_verts = graham_scan(get_all_vertices(h_coordinates[h]))  # all vertices of the convex hull
-            mask = interpolate(self.m, self.n, hull_verts, use_wn=True)
-            for r in range(self.m):
-                for c in range(self.n):
-                    if mask[r][c] and self.terrain[r][c] != 2:
-                        self.terrain[r][c] = h
+            self._fill_mountain_1(h, h_coordinates)
 
         # remove the remaining fog on the terrain
         for r in range(self.m):
@@ -43,23 +45,46 @@ class Battleground(object):
                 if self.terrain[r][c] == 1:
                     self.terrain[r][c] = 0
 
-    def _init_from_terrain_and_fog(self, terrain, fog):
+    def _fill_mountain_1(self, h, h_coordinates):
+        hull_verts = graham_scan(get_all_vertices(h_coordinates[h]))  # all vertices of the convex hull
+        mask = interpolate(self.m, self.n, hull_verts, use_wn=True)
+        for r in range(self.m):
+            for c in range(self.n):
+                if mask[r][c] and self.terrain[r][c] != 2:
+                    self.terrain[r][c] = h
+
+    def _init_from_terrain_and_fog(self, terrain, fog=None):
         # the size of the battleground (m * n matrix)
         self.m = len(terrain)
         self.n = len(terrain[0])
         self.max_h = max(entry for row in terrain for entry in row)  # the maximum height
 
         self._check_valid(terrain, "input terrain")
-        self._check_valid(fog, "input fog")
 
         self.terrain = terrain
-        self.fog = fog
+
+        if fog is None:
+            # if there is no fog, set fog to 0
+            self.fog = [[0] * self.n for _ in range(self.m)]
+        else:
+            self._check_valid(fog, "input fog")
+            self.fog = fog
+
+    def _init_from_size(self, m, n):
+        self.m = m
+        self.n = n
+        # randomly initialize mountains and
 
     def _check_valid(self, mat, name="input"):
         """
         check whether the input matrix (mat, fog, terrain, etc) is valid (match the dimensions)
         raise a ValueError if invalid.
         """
+        if self.m <= 0:
+            raise ValueError("self.m must be positive, got {} instead".format(self.m))
+        if self.n <= 0:
+            raise ValueError("self.n must be positive, got {} instead".format(self.n))
+
         if len(mat) != self.m:
             raise ValueError("Input Matrix Shape Mismatch: the {} matrix has {} rows, but self.m={}".
                              format(name, len(mat), self.m))

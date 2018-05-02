@@ -52,7 +52,7 @@ class TestEverything(unittest.TestCase):
     def test_robot(self):
         terrain = [[0,0],
                    [0,0]]
-        battleground = Battleground(terrain)
+        battleground = Battleground(terrain=terrain)
         robot = Robot(battleground)
         self.assertTrue(robot.dfs())
         self.assertEqual(robot.moves, 2)
@@ -125,7 +125,7 @@ class TestEverything(unittest.TestCase):
             [0, 0, 3, 3, 3, 3, 3, 0, 0],
             [0, 0, 3, 3, 3, 2, 0, 0, 0],
             [0, 0, 2, 0, 0, 2, 0, 0, 0]]
-        b2 = Battleground(view)
+        b2 = Battleground(view=view)
         self.assertEqual(b2.fog, fog)
         # for row in b2.terrain:
         #     print(row)
