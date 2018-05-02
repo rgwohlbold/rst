@@ -55,7 +55,11 @@ class TestEverything(unittest.TestCase):
         battleground = Battleground(terrain)
         robot = Robot(battleground)
         self.assertTrue(robot.dfs())
-        self.assertEqual(robot.moves,2)
+        self.assertEqual(robot.moves, 2)
+        
+        robot = Robot(battleground)
+        self.assertTrue(robot.follow_left())
+        self.assertTrue(robot.moves, 2)
 
     def test_battleground_1(self):
         view = [
