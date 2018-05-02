@@ -1,7 +1,6 @@
-import copy 
-from display import get_display, display
 from time import sleep
-from gui import render as gui_render
+from output.gui import render as gui_render
+from output.console import get_display, display
 
 class Robot:
 
@@ -116,12 +115,12 @@ class Robot:
         return self.follow_side(state,direction)
 
     # follow_side call for a follow left algorithm
-    def follow_left(self, debug = False):
-        return self.follow_side(debug, 0, 1)
+    def follow_left(self):
+        return self.follow_side(0, 1)
 
     # follow_side call for a follow right algorithm
-    def follow_right(self, debug = False):
-        return self.follow_side(debug, 0, -1)
+    def follow_right(self):
+        return self.follow_side(0, -1)
 
     # easily allows printing out the battleground when moving
     def inc_moves(self):

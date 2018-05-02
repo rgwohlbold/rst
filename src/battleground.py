@@ -1,5 +1,4 @@
 import copy
-import display
 from convex_hull import get_all_vertices, graham_scan
 from polygon import interpolate
 

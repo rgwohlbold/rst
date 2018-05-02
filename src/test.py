@@ -1,9 +1,9 @@
 import unittest
-from hull import graham_scan as graham_scan_r
+from unused.hull import graham_scan as graham_scan_r
 from convex_hull import graham_scan as graham_scan_t
 from battleground import Battleground
 from polygon import crossing_number, winding_number
-from bresenham import draw_line
+from unused.bresenham import draw_line
 from robot import Robot
 
 class TestEverything(unittest.TestCase):
