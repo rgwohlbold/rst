@@ -1,6 +1,7 @@
 import copy
 from convex_hull import get_all_vertices, graham_scan
 from polygon import interpolate
+from output.console import get_display
 
 DEBUG = False
 
@@ -94,7 +95,7 @@ class Battleground(object):
                                  .format(name, len(row), i, self.n))
 
     def __str__(self):
-        return display.get_display(self.terrain)
+        return get_display(self.terrain)
 
     def get_view(self, i1=-1, j1=-1, interfere=False, birdseye=True):
         """
