@@ -3,7 +3,6 @@ import display
 from convex_hull import get_all_vertices, graham_scan
 from polygon import interpolate
 
-
 DEBUG = False
 
 
@@ -11,7 +10,7 @@ class Battleground(object):
     def __init__(self, mat):
         self.m = len(mat)
         self.n = len(mat[0])
-        self.max_h = max(ent for row in mat for ent in row)  # the maximum height
+        self.max_h = max(entry for row in mat for entry in row)  # the maximum height
 
         # check input dimensions
         if any(len(mat[i]) != self.n for i in range(self.m)):
@@ -22,7 +21,7 @@ class Battleground(object):
 
         # get a complete terrain from mat using a convex hull algorithm
         # get coordinates for each height
-        h_coordinates = {h: [] for h in range(3, self.max_h+1)}  # h -> list of coordinates that have height h
+        h_coordinates = {h: [] for h in range(3, self.max_h + 1)}  # h -> list of coordinates that have height h
         for r in range(self.m):
             for c in range(self.n):
                 if mat[r][c] >= 3:
@@ -35,7 +34,7 @@ class Battleground(object):
             if DEBUG:
                 print("all coordinates for h={}: ".format(h), get_all_vertices(h_coordinates[h]))
                 print("hull coordinates for h={}: ".format(h), hull_verts)
-                #print("hull coordinates 1 for h={}: ".format(h), graham_scan_1(get_all_vertices(h_coordinates[h])))
+                # print("hull coordinates 1 for h={}: ".format(h), graham_scan_1(get_all_vertices(h_coordinates[h])))
                 print("WAIT---Printing mask", h)
                 for row in mask:
                     print([int(x) for x in row], end=',\n')
@@ -54,7 +53,6 @@ class Battleground(object):
                     self.terrain[r][c] = 0
 
     def _init_from_terrain_and_fog(self, terrain, fog):
-        raise DeprecationWarning("Initialization of battleground from terrain and fog will soon be deprecated.")
         # the size of the battleground (m * n matrix)
         self.m = len(terrain)
         self.n = len(terrain[0])
@@ -70,9 +68,22 @@ class Battleground(object):
         self.terrain = terrain
         self.fog = fog
 
+    def _check_valid(self, mat, name="input"):
+        """
+        check whether the input matrix (mat, fog, terrain, etc) is valid
+        raise a ValueError otherwise.
+        """
+        if len(mat) != self.m:
+            raise ValueError("Input Matrix Shape Mismatch: the {} matrix has {} rows, but self.m={}".
+                             format(name, len(mat), self.m))
+        for i, row in enumerate(mat):
+            if len(row) != self.n:
+                raise ValueError("Input Matrix Shape Mismatch: the {} matrix has {} columns at row {}, but self.n={}"
+                                 .format(name, len(row), i, self.n))
+
     def __str__(self):
         return display.get_display(self.terrain)
-    
+
     def get_view(self, i1=-1, j1=-1, interfere=False, birdseye=True):
         """
         get a view of the battleground for a robot at (i, j)
@@ -96,7 +107,8 @@ class Battleground(object):
 
         if i1 >= 0 and j1 >= 0:  # not default -> add information
             # get a list of coordinates for valid surrounding blocks
-            neighbors = [(i, j) for j in range(max(j1-1, 0), min(j1+2, self.n)) for i in range(max(i1-1, 0), min(i1+2, self.m))]
+            neighbors = [(i, j) for j in range(max(j1 - 1, 0), min(j1 + 2, self.n)) for i in
+                         range(max(i1 - 1, 0), min(i1 + 2, self.m))]
 
             # update the view matrix
             for i, j in neighbors:
@@ -108,3 +120,7 @@ class Battleground(object):
                     self.fog[i][j] = False  # clear the fog out of the way
 
         return view
+
+
+def make_new_battleground(m, n, max_h, fog_rate):
+    terrain = [[0] * n for _ in range(m)]
