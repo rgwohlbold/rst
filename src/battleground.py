@@ -54,6 +54,37 @@ class Battleground(object):
                 if mask[r][c] and self.terrain[r][c] != 2:
                     self.terrain[r][c] = h
 
+    def _fill_mountain_2(self, h, h_coordinates):
+        raise RuntimeError("wrong method invoked")
+        hull_verts = graham_scan(get_all_vertices(h_coordinates[h]))  # all vertices of the convex hull
+        x0, x1 = min(p[0] for p in hull_verts), max(p[0] for p in hull_verts)
+        y0, y1 = min(p[1] for p in hull_verts), max(p[1] for p in hull_verts)
+
+        # list of all points on the perimeter
+        print("hull vertices:", hull_verts)
+        perimeter_points = sum((draw_line(hull_verts[i], hull_verts[i-1]) for i in range(0, -len(hull_verts), -1)), [])
+        print("perimeter points: ", perimeter_points)
+
+        if abs(x1 - x0) < abs(y1 - y0) or True:
+            # taller than wide, index by x
+            x_bounds = {x: [] for x in range(x0, x1)}
+            for x, y in perimeter_points:
+                x_bounds[x].append(y)
+            for x in x_bounds:
+                print(x, min(x_bounds[x]), max(x_bounds[x]))
+                for y in range(min(x_bounds[x]), max(x_bounds[x])):
+                    if self.terrain[x][y] != 2:
+                        self.terrain[x][y] = h
+        else:
+            # wider than tall, index by y
+            y_bounds = {y: [] for y in range(y0, y1+1)}
+            for x, y in perimeter_points:
+                y_bounds[y].append(x)
+            for y in y_bounds:
+                for x in range(min(y_bounds[y]), max(y_bounds[y])):
+                    if self.terrain[x][y] != 2:
+                        self.terrain[x][y] = h
+
     def _init_from_terrain_and_fog(self, terrain, fog=None):
         # the size of the battleground (m * n matrix)
         self.m = len(terrain)
