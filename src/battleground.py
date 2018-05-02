@@ -8,39 +8,31 @@ DEBUG = False
 
 class Battleground(object):
     def __init__(self, mat):
-        self.m = len(mat)
-        self.n = len(mat[0])
-        self.max_h = max(entry for row in mat for entry in row)  # the maximum height
+        self._init_from_view(mat)
+
+    def _init_from_view(self, view):
+        self.m = len(view)
+        self.n = len(view[0])
+        self.max_h = max(entry for row in view for entry in row)  # the maximum height
 
         # check input dimensions
-        if any(len(mat[i]) != self.n for i in range(self.m)):
-            raise ValueError("Shape mismatch: all rows in the terrain matrix should have had equal lengths")
+        self._check_valid(view, "input view")
 
-        self.terrain = copy.deepcopy(mat)
-        self.fog = [[entry == 1 for entry in row] for row in mat]
+        # initialize terrain and fog
+        self.terrain = copy.deepcopy(view)
+        self.fog = [[entry == 1 for entry in row] for row in view]
 
-        # get a complete terrain from mat using a convex hull algorithm
-        # get coordinates for each height
+        # find the mountain coordinates
         h_coordinates = {h: [] for h in range(3, self.max_h + 1)}  # h -> list of coordinates that have height h
         for r in range(self.m):
             for c in range(self.n):
-                if mat[r][c] >= 3:
-                    h_coordinates[mat[r][c]].append((r, c))
+                if self.terrain[r][c] >= 3:
+                    h_coordinates[self.terrain[r][c]].append((r, c))
 
-        # fill in the mountains
-        for h in h_coordinates:
+        # fill the mountains
+        for h in h_coordinates:  # iterate over different heights
             hull_verts = graham_scan(get_all_vertices(h_coordinates[h]))  # all vertices of the convex hull
             mask = interpolate(self.m, self.n, hull_verts, use_wn=True)
-            if DEBUG:
-                print("all coordinates for h={}: ".format(h), get_all_vertices(h_coordinates[h]))
-                print("hull coordinates for h={}: ".format(h), hull_verts)
-                # print("hull coordinates 1 for h={}: ".format(h), graham_scan_1(get_all_vertices(h_coordinates[h])))
-                print("WAIT---Printing mask", h)
-                for row in mask:
-                    print([int(x) for x in row], end=',\n')
-                print('ended')
-            # import time
-            # time.sleep(1)
             for r in range(self.m):
                 for c in range(self.n):
                     if mask[r][c] and self.terrain[r][c] != 2:
@@ -56,22 +48,18 @@ class Battleground(object):
         # the size of the battleground (m * n matrix)
         self.m = len(terrain)
         self.n = len(terrain[0])
+        self.max_h = max(entry for row in terrain for entry in row)  # the maximum height
 
-        # check input dimensions
-        if len(fog) != self.m:
-            raise ValueError("Shape mismatch: m_fog={} should have been equal to m_terrain={}".format(len(fog), self.m))
-        if any(len(terrain[i]) != self.n for i in range(self.m)):
-            raise ValueError("Shape mismatch: all rows in the terrain matrix should have had equal lengths")
-        if any(len(fog[i]) != self.n for i in range(self.m)):
-            raise ValueError("Shape mismatch: all rows in the fog matrix should have had equal lengths")
+        self._check_valid(terrain, "input terrain")
+        self._check_valid(fog, "input fog")
 
         self.terrain = terrain
         self.fog = fog
 
     def _check_valid(self, mat, name="input"):
         """
-        check whether the input matrix (mat, fog, terrain, etc) is valid
-        raise a ValueError otherwise.
+        check whether the input matrix (mat, fog, terrain, etc) is valid (match the dimensions)
+        raise a ValueError if invalid.
         """
         if len(mat) != self.m:
             raise ValueError("Input Matrix Shape Mismatch: the {} matrix has {} rows, but self.m={}".
@@ -120,7 +108,3 @@ class Battleground(object):
                     self.fog[i][j] = False  # clear the fog out of the way
 
         return view
-
-
-def make_new_battleground(m, n, max_h, fog_rate):
-    terrain = [[0] * n for _ in range(m)]
