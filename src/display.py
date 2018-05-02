@@ -28,7 +28,7 @@ displaymap = {
 
 
 def display(terrain):
-    print(get_display(terrain))
+    print(get_display(terrain),"\n\n")
 
 def get_display(terrain):
     ret = ""

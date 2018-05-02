@@ -1,6 +1,7 @@
 from robot  import Robot
 from display import display 
 from battleground import Battleground
+import gui
 view = [
     [1, 1, 0, 1, 1, 1, 1, 1, 0],
     [0, 1, 4, 1, 2, 4, 1, 1, 1],
@@ -12,5 +13,5 @@ view = [
     [1, 0, 2, 0, 1, 2, 1, 1, 1]]
 
 ground = Battleground(view)
-robot = Robot(ground)
-robot.dfs(debug=False,gui=True)
+robot = Robot(ground, display_function=Robot.DISPLAY_CONSOLE)
+robot.dfs()
