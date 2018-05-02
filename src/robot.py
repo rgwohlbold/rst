@@ -1,6 +1,7 @@
 import copy 
 from display import get_display
-from time import sleep 
+from time import sleep
+import gui
 
 class Robot:
     
@@ -25,7 +26,7 @@ class Robot:
         return get_display(arr) 
 
     # depth first search on the battleground
-    def dfs(self, debug = False, visited = None):
+    def dfs(self, debug = False, visited = None, gui=False):
          
         if visited == None:
             visited = [[False for x in range(self.battleground.n)] for y in range(self.battleground.m)]
@@ -41,28 +42,28 @@ class Robot:
             new_x = x_off + self.x 
             if 0 <= new_x < len(view) and view[new_x][self.y] == 0 and not visited[new_x][self.y]:
                 self.x += x_off 
-                self.inc_moves(debug)
-                if self.dfs(debug, visited):
+                self.inc_moves(debug, gui)
+                if self.dfs(debug, visited, gui=gui):
                     return True 
                 self.x -= x_off 
-                self.inc_moves(debug)
+                self.inc_moves(debug, gui)
         
         for y_off in [-1,1]:
             new_y = y_off + self.y 
             if 0 <= new_y < len(view[0]) and view[self.x][new_y] == 0 and not visited[self.x][new_y]:
                 self.y += y_off 
-                self.inc_moves(debug)
-                if self.dfs(debug, visited):
+                self.inc_moves(debug, gui)
+                if self.dfs(debug, visited, gui=gui):
                     return True 
                 self.y -= y_off 
-                self.inc_moves(debug)
+                self.inc_moves(debug, gui)
                 
         return False 
     
     # follow left algorithm for solving the maze, it is generalized for right or left,
     # @param direction should only be 1 or -1, any other numbers will cause strange behavior.
     # @param state, don't change this variable or some edge cases will be marked as
-    def follow_side(self, debug = False, state = 0, direction = 1):
+    def follow_side(self, debug = False, state = 0, direction = 1, gui=False):
         # represents the movements of different states.
         def get_coord(state, x = self.x, y = self.y):
             #        up    left   down   right
@@ -90,14 +91,14 @@ class Robot:
             self.x = bx 
             self.y = by
             state += direction
-            self.inc_moves(debug)
+            self.inc_moves(debug, gui)
         else:
             # 'forward' x and y
             fx, fy = get_coord(state)
             if (self.in_bounds(fx, fy) and view[fx][fy] == 0):
                 self.x = fx
                 self.y = fy
-                self.inc_moves(debug)
+                self.inc_moves(debug, gui)
             else:
                 state -= direction
         return self.follow_side(debug, state,direction)
@@ -111,13 +112,21 @@ class Robot:
         return self.follow_side(debug, 0, -1)
 
     # easily allows printing out the battleground when moving
-    def inc_moves(self, debug = False):
+    def inc_moves(self, debug = False, gui=False):
         if debug:
             sleep(.2)
             print(self)
             print("\n\n")
+        if gui:
+            sleep(.2)
+            self.render()
         self.moves += 1
     
     # is the given coordinate in bounds of the battlefield
     def in_bounds(self, x, y):
         return -1 < y < self.battleground.n and -1 < x < self.battleground.m
+
+    def render(self):
+        view = self.battleground.get_view()
+        view[self.x][self.y] = -1
+        gui.render(view)
