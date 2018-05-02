@@ -93,7 +93,6 @@ class TestEverything(unittest.TestCase):
             [0, 0, 2, 0, 0, 2, 0, 0, 0]]
 
         # b1 = Battleground()
-        # b1._init_from_terrain_and_fog(terrain, fog)
         # self.assertEqual(b1.get_view(i1=-1, j1=-1, interfere=False, birdseye=True), view)
 
     def test_battleground_2(self):

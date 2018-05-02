@@ -4,8 +4,8 @@ from convex_hull import get_all_vertices, graham_scan
 from polygon import interpolate
 
 
-
 DEBUG = False
+
 
 class Battleground(object):
     def __init__(self, mat):
@@ -54,7 +54,7 @@ class Battleground(object):
                     self.terrain[r][c] = 0
 
     def _init_from_terrain_and_fog(self, terrain, fog):
-
+        raise DeprecationWarning("Initialization of battleground from terrain and fog will soon be deprecated.")
         # the size of the battleground (m * n matrix)
         self.m = len(terrain)
         self.n = len(terrain[0])
@@ -72,7 +72,6 @@ class Battleground(object):
 
     def __str__(self):
         return display.get_display(self.terrain)
-    
     
     def get_view(self, i1=-1, j1=-1, interfere=False, birdseye=True):
         """
