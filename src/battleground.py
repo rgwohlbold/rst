@@ -38,18 +38,21 @@ class Battleground(object):
 
         # fill the mountains
         for h in h_coordinates:  # iterate over different heights
-            hull_verts = graham_scan(get_all_vertices(h_coordinates[h]))  # all vertices of the convex hull
-            mask = interpolate(self.m, self.n, hull_verts, use_wn=True)
-            for r in range(self.m):
-                for c in range(self.n):
-                    if mask[r][c] and self.terrain[r][c] != 2:
-                        self.terrain[r][c] = h
+            self._fill_mountain_1(h, h_coordinates)
 
         # remove the remaining fog on the terrain
         for r in range(self.m):
             for c in range(self.n):
                 if self.terrain[r][c] == 1:
                     self.terrain[r][c] = 0
+
+    def _fill_mountain_1(self, h, h_coordinates):
+        hull_verts = graham_scan(get_all_vertices(h_coordinates[h]))  # all vertices of the convex hull
+        mask = interpolate(self.m, self.n, hull_verts, use_wn=True)
+        for r in range(self.m):
+            for c in range(self.n):
+                if mask[r][c] and self.terrain[r][c] != 2:
+                    self.terrain[r][c] = h
 
     def _init_from_terrain_and_fog(self, terrain, fog=None):
         # the size of the battleground (m * n matrix)
