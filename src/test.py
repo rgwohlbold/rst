@@ -5,6 +5,7 @@ from battleground import Battleground
 from polygon import crossing_number, winding_number
 from unused.bresenham import draw_line
 from robot import Robot
+from test_util import redirect_stdout
 
 class TestEverything(unittest.TestCase):
     def test_init(self):
@@ -131,6 +132,30 @@ class TestEverything(unittest.TestCase):
         #     print(row)
         self.assertEqual(b2.terrain, terrain)
 
+    def test_test(self):
+
+        with redirect_stdout() as buffer:
+            view = [
+                [1, 1, 0, 1, 1, 1, 1, 1, 0],
+                [0, 1, 4, 1, 2, 4, 1, 1, 1],
+                [1, 1, 1, 2, 1, 1, 4, 1, 1],
+                [1, 2, 2, 4, 1, 1, 1, 1, 2],
+                [1, 1, 1, 1, 3, 1, 1, 1, 2],
+                [0, 1, 1, 1, 1, 1, 3, 1, 1],
+                [0, 1, 3, 1, 1, 2, 1, 1, 1],
+                [1, 0, 2, 0, 1, 2, 1, 1, 1]]
+            b2 = Battleground(view=view)
+            print(b2)
+            s = buffer.uncolorized()
+        self.assertEqual(s.strip(),
+"""_ _ _ _ _ _ _ _ _ 
+_ _ ^ ^ O ^ ^ _ _ 
+_ _ ^ O ^ ^ ^ _ _ 
+_ O O ^ ^ ^ _ _ O 
+_ _ _ ^ ^ ^ _ _ O 
+_ _ ^ ^ ^ ^ ^ _ _ 
+_ _ ^ ^ ^ O _ _ _ 
+_ _ O _ _ O _ _ _""")
 
 if __name__ == "__main__":
     unittest.main()
