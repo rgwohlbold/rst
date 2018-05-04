@@ -1,6 +1,6 @@
 from time import sleep
-from output.gui import render as gui_render
-from output.console import get_display, display
+from .output.gui import render as gui_render
+from .output.console import get_display, display
 
 class Robot:
 
