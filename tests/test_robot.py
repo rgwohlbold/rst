@@ -1,4 +1,5 @@
 import unittest
+from util import redirect_stdout
 from rst.battleground import Battleground
 from rst.robot import Robot
 
@@ -10,6 +11,11 @@ class TestRobot(unittest.TestCase):
         [0,0]
     ]
 
+    small_terrain_repr = """
+= _ 
+_ _ 
+"""
+
     empty_terrain = [
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
@@ -19,6 +25,16 @@ class TestRobot(unittest.TestCase):
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0]
     ]
+
+    empty_terrain_repr = """
+= _ _ _ _ _ _ 
+_ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ 
+"""
 
     # Currently failing to follow_side
     blocked_terrain = [
@@ -31,7 +47,17 @@ class TestRobot(unittest.TestCase):
         [0,0,0,0,0,0,0],
     ]
 
-    test_table = [
+    blocked_terrain_repr = """
+= _ _ _ _ _ _ 
+_ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ 
+^ ^ ^ ^ ^ ^ ^ 
+_ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ 
+"""
+
+    test_behaviour_table = [
         {
             "terrain": small_terrain,
             "goal": None,
@@ -69,9 +95,24 @@ class TestRobot(unittest.TestCase):
         }
     ]
 
-    def test_robot(self):
+    test_output_table = [
+        {
+            "terrain": small_terrain,
+            "repr": small_terrain_repr
+        },
+        {
+            "terrain": empty_terrain,
+            "repr": empty_terrain_repr
+        },
+        {
+            "terrain": blocked_terrain,
+            "repr": blocked_terrain_repr
+        }
+    ]
 
-        for entry in TestRobot.test_table:
+    def test_robot_behaviour(self):
+
+        for entry in TestRobot.test_behaviour_table:
             if entry["goal"] is None and entry["solvable"]:
                 goal = (len(entry["terrain"]) - 1, len(entry["terrain"]) - 1)
             elif entry["goal"] is None:
@@ -95,4 +136,23 @@ class TestRobot(unittest.TestCase):
             self.assertEqual(robot.follow_right(), entry["solvable"])
             self.assertEqual(robot.moves, entry["moves_right"])
             self.assertEqual(goal, (robot.x, robot.y))
+
+    def test_robot_output(self):
+
+        for entry in TestRobot.test_output_table:
+            with redirect_stdout() as buffer:
+                battleground = Battleground(terrain=entry["terrain"])
+                robot = Robot(battleground)
+                print(robot)
+                s = buffer.uncolorized()
+            self.assertEqual(s.strip(), entry["repr"].strip())
+
+            with redirect_stdout() as buffer:
+                battleground = Battleground(terrain=entry["terrain"])
+                robot = Robot(battleground, display_function=Robot.DISPLAY_CONSOLE)
+                robot.render()
+                s = buffer.uncolorized()
+            self.assertEqual(s.strip(), entry["repr"].strip())
+
+        pass
 
