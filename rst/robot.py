@@ -77,7 +77,7 @@ class Robot:
     def follow_side(self, state = 0, direction = 1):
         # represents the movements of different states.
         def get_coord(state, x = self.x, y = self.y):
-            #        up    left   down   right
+            #        down    left   up   right
             wheel = [[0,1],[-1,0],[0,-1],[1,0]]
             state = (state + 4) % 4
             ret = wheel[state]
@@ -90,7 +90,7 @@ class Robot:
             return True
 
         # isn't solveable
-        if self.x == self.start_x and self.y == self.start_y and self.moves != 0 and state == 0:
+        if self.x == self.start_x and self.y == self.start_y and self.moves != 0 and state in (0,3):
             return False 
 
         state = (state + 4) % 4
