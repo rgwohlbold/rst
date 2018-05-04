@@ -24,3 +24,9 @@ def uncolorize(s):
     for escape in escapes:
         s = s.replace(escape, "")
     return s
+
+def empty(m, n):
+    return [[0] * n] * m
+
+def empty_repr(m, n):
+    return ("_ " * n + "\n") * m

@@ -154,5 +154,3 @@ _ _ _ _ _ _ _
                 s = buffer.uncolorized()
             self.assertEqual(s.strip(), entry["repr"].strip())
 
-        pass
-
