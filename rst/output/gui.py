@@ -6,25 +6,35 @@ COLOR_EMPTY = (0, 0, 0)
 COLOR_FOG = (160, 160, 160)
 COLOR_PIT = (101, 67, 33)
 
+STATE_UNINITIALIZED = 0
+STATE_RUNNING = 1
+STATE_FINISHED = 2
+state = STATE_UNINITIALIZED
 screen = None
-initialized = False
+running = False
 size = 50
 
 
 def init():
-    global screen, initialized, size
+    global screen, state, size
     pygame.init()
     screen = pygame.display.set_mode((9 * size, 9 * size))
-    initialized = True
+    state = STATE_RUNNING
 
 
-def render(battleground):
-    if not initialized:
+def render(battleground, on_exit=sys.exit):
+    global state
+
+    if state == STATE_UNINITIALIZED or state == STATE_FINISHED:
         init()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            sys.exit()
+            if on_exit is not None:
+                on_exit();
+            pygame.quit()
+            state = STATE_FINISHED
+            return
 
     screen.fill((0, 0, 0))
     for r, row in enumerate(battleground):
@@ -46,9 +56,14 @@ def render(battleground):
 
 
 def get_color(c):
-    blue = min(250, c * 50)
-    green = max(0, 255 - (c * 50))
-    return (0, green, blue)
+    green = 255 - (c * 50)
+    if green < 0 or green > 255:
+        green = 0
+
+    blue = c * 50
+    if blue > 255 or blue < 0:
+        blue = 255
+    return 0, green, blue
 
 
 def draw_color(color, r, c, screen):
