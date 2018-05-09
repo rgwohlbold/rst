@@ -1,6 +1,9 @@
 from robot import Robot
 from battleground import Battleground
 
+from searches.follow_right import FollowRight
+from searches.follow_left  import FollowLeft
+from searches.dfs import DFS
 
 view = [
     [1, 1, 0, 1, 1, 1, 1, 1, 0],
@@ -13,5 +16,8 @@ view = [
     [1, 0, 2, 0, 1, 2, 1, 1, 1]]
 
 ground = Battleground(view=view)
-robot = Robot(ground, display_function=Robot.DISPLAY_CONSOLE)
-robot.dfs()
+
+# ncurses or console.py output
+for search in [DFS, FollowRight, FollowLeft]:
+    robot = Robot(ground, search(), display_function=Robot.DISPLAY_CONSOLE)
+    robot.run()
