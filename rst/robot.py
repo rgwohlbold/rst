@@ -1,7 +1,7 @@
 from time import sleep
 from output.gui import render as gui_render
 from output.console import get_display, display
-from output.ncurses import render as curses_render
+from output.curses import render as curses_render
 
 class Robot:
 
