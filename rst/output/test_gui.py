@@ -1,7 +1,7 @@
 import unittest
 import pygame
 from functools import partial
-import rst.output.gui as gui
+import output.gui as gui
 
 
 class TestGUI(unittest.TestCase):

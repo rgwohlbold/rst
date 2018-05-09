@@ -1,5 +1,5 @@
 import unittest
-from rst.unused.bresenham import draw_line
+from unused.bresenham import draw_line
 
 
 class TestBresenham(unittest.TestCase):

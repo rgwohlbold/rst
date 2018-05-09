@@ -1,5 +1,5 @@
 import unittest
-from rst.polygon import crossing_number, winding_number
+from polygon import crossing_number, winding_number
 
 
 class TestPolygon(unittest.TestCase):

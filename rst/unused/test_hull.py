@@ -1,5 +1,5 @@
 import unittest
-from rst.unused.hull import graham_scan
+from unused.hull import graham_scan
 
 
 class TestHull(unittest.TestCase):

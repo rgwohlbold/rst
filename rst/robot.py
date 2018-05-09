@@ -1,10 +1,12 @@
 from time import sleep
-from .output.gui import render as gui_render
-from .output.console import get_display, display
+from output.gui import render as gui_render
+from output.console import get_display, display
+from output.ncurses import render as curses_render
 
 class Robot:
 
     DISPLAY_CONSOLE = display
+    DISPLAY_CURSES = curses_render
     DISPLAY_WINDOW = gui_render
     DISPLAY_NONE = None
 

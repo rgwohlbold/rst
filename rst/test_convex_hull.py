@@ -1,5 +1,5 @@
 import unittest
-from rst.convex_hull import graham_scan
+from convex_hull import graham_scan
 
 
 class TestConvexHull(unittest.TestCase):

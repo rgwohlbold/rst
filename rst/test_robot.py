@@ -1,7 +1,7 @@
 import unittest
 from util import redirect_stdout
-from rst.battleground import Battleground
-from rst.robot import Robot
+from battleground import Battleground
+from robot import Robot
 
 
 class TestRobot(unittest.TestCase):

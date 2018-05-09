@@ -1,5 +1,5 @@
 import unittest
-from rst.battleground import Battleground
+from battleground import Battleground
 from util import redirect_stdout, empty, empty_repr
 
 
@@ -121,7 +121,7 @@ _ _ O _ _ O _ _ _
                     with redirect_stdout() as buffer:
                         print(battleground)
                         s = buffer.uncolorized()
-                    self.assertEquals(s.strip(), entry["repr"].strip())
+                    self.assertEqual(s.strip(), entry["repr"].strip())
 
             except Exception as e:
                 if e.__class__ != entry.get("exception").__class__:

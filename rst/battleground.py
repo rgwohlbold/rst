@@ -1,7 +1,7 @@
 import copy
-from .convex_hull import get_all_vertices, graham_scan
-from .polygon import interpolate
-from .output.console import get_display
+from convex_hull import get_all_vertices, graham_scan
+from polygon import interpolate
+from output.console import get_display
 
 DEBUG = False
 
