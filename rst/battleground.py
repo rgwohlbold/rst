@@ -1,7 +1,11 @@
 import copy
+import random
+import itertools
 from convex_hull import get_all_vertices, graham_scan
 from polygon import interpolate
 from output.console import get_display
+
+
 
 DEBUG = False
 
@@ -13,7 +17,10 @@ class Battleground(object):
         elif terrain is not None:
             self._init_from_terrain_and_fog(terrain, fog)
         elif m is not None and n is not None:
-            self._init_from_size(m, n)
+            # please supply parameters:
+            # max_h: the maximum height of the mountain
+            #
+            self._init_from_size(m, n, kwargs['fog_rate'], kwargs['hill_rates'])
         else:
             raise RuntimeError("Trying to create uninitialized battleground")
 
@@ -71,15 +78,36 @@ class Battleground(object):
             self._check_valid(fog, "input fog")
             self.fog = fog
 
-    def _init_from_size(self, m, n):
+    def _init_from_size(self, m, n, fog_rate, hill_rates):
         self.m = m
         self.n = n
 
-        self.terrain = [[0] * n] * m
-        self.fog = [[0] * n] * m
+        self.terrain = [[0] * self.n] * self.m
 
-        self._check_valid(self.terrain)
-        # randomly initialize mountains and
+        self.fog = [[0] * self.n] * self.m
+        assert 0.0 <= fog_rate <= 1.0
+        # add fog
+        for r, c in random.sample(population=itertools.product(range(self.m), range(self.n)),
+                                  k=int(round(fog_rate * self.m * self.n))):
+            self.fog[r][c] = 1
+
+        self._check_valid(terrain, "generated terrain")
+
+        # randomly initialize mountains and ravines
+        self.max_h = len(hill_rates) + 1
+        h_coordinates = {}  # h -> list of coordinates that have height h
+
+        for h in range(2, len(hill_rates) + 2):
+            rate = hill_rates[h - 2]
+            hills = list(itertools.product(range(self.m), range(self.n)))
+            for r, c in random.sample(population=hills, k=int(round(rate * self.m * self.n))):
+                self.terrain[r][c] = h
+            if h != 2:
+                h_coordinates[h] = hills
+
+        # fill the mountains
+        for h in h_coordinates:  # iterate over different heights
+            self._fill_mountain_1(h, h_coordinates)
 
     def _check_valid(self, mat, name="input"):
         """
