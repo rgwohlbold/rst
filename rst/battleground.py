@@ -11,16 +11,19 @@ DEBUG = False
 
 
 class Battleground(object):
-    def __init__(self, view=None, terrain=None, fog=None, m=None, n=None, **kwargs):
+    def __init__(self, view=None, terrain=None, fog=None, m=None, n=None, fog_rate=None, hill_rates=None, **kwargs):
         if view is not None:
             self._init_from_view(view)
         elif terrain is not None:
             self._init_from_terrain_and_fog(terrain, fog)
         elif m is not None and n is not None:
+            # default fog_rate and hill_rates
+            fog_rate = 0.6 if fog_rate is None else fog_rate
+            hill_rates = [0.3, 0.3] if hill_rates is None else hill_rates
             # please supply parameters:
             # max_h: the maximum height of the mountain
             #
-            self._init_from_size(m, n, kwargs['fog_rate'], kwargs['hill_rates'])
+            self._init_from_size(m, n, fog_rate, hill_rates)
         else:
             raise RuntimeError("Trying to create uninitialized battleground")
 
@@ -87,11 +90,11 @@ class Battleground(object):
         self.fog = [[0] * self.n] * self.m
         assert 0.0 <= fog_rate <= 1.0
         # add fog
-        for r, c in random.sample(population=itertools.product(range(self.m), range(self.n)),
+        for r, c in random.sample(population=list(itertools.product(range(self.m), range(self.n))),
                                   k=int(round(fog_rate * self.m * self.n))):
             self.fog[r][c] = 1
 
-        self._check_valid(terrain, "generated terrain")
+        self._check_valid(self.terrain, "generated terrain")
 
         # randomly initialize mountains and ravines
         self.max_h = len(hill_rates) + 1

@@ -65,15 +65,11 @@ _ _ O _ _ O _ _ _
             "from": "dimensions",
             "m": 3,
             "n": 5,
-            "fog": empty(3,5),
-            "repr": empty_repr(3,5)
         },
         {
             "from": "dimensions",
             "m": 7,
             "n": 9,
-            "fog": empty(7,9),
-            "repr": empty_repr(7,9)
         },
         {
             "from": "dimensions",
@@ -90,7 +86,7 @@ _ _ O _ _ O _ _ _
         {
             "from": "nothing",
             "exception": RuntimeError()
-        }
+        },
     ]
 
     def test_initialization(self):
@@ -110,7 +106,7 @@ _ _ O _ _ O _ _ _
                     self.assertEqual(len(view), entry["m"])
                     for column in view:
                         self.assertEqual(len(column), entry["n"])
-                    if entry["fog"] is not None:
+                    if entry.get("fog") is not None:
                         self.assertEqual(battleground.fog, entry["fog"])
                 elif entry["from"] == "nothing":
                     battleground = Battleground()
