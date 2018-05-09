@@ -1,6 +1,9 @@
 from robot  import Robot
 from display import display 
 from battleground import Battleground
+from searches.follow_right import FollowRight
+from searches.dfs import DFS
+
 view = [
     [1, 1, 0, 1, 1, 1, 1, 1, 0],
     [0, 1, 4, 1, 2, 4, 1, 1, 1],
@@ -13,5 +16,6 @@ view = [
 
 ground = Battleground(view)
 print(ground)
-robot  = Robot(ground)
-robot.dfs(True)
+robot  = Robot(ground, DFS(), debug = True)
+# robot.dfs(True)
+robot.run()

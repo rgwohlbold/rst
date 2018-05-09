@@ -109,3 +109,7 @@ class Battleground(object):
                     self.fog[i][j] = False  # clear the fog out of the way
 
         return view
+    
+    # are the given coordinates in bounds or not?
+    def in_bounds(self, x, y):
+        return -1 < y < self.n and -1 < x < self.m
