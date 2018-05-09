@@ -1,10 +1,19 @@
-import importlib
-
-curses_loader = importlib.util.find_spec("curses")
-found = curses_loader is not None
-if curses_loader is not None:
-    import curses
 import atexit
+
+
+def module_exists(module_name):
+    try:
+        __import__(module_name)
+    except ImportError:
+        return False
+    else:
+        return True
+
+
+found = False
+if module_exists("curses"):
+    found = True
+    import curses
 
 
 initialized = False
@@ -19,7 +28,6 @@ config = {
     3: ("^", 5, curses.COLOR_GREEN, curses.COLOR_BLACK),
     "all": ("^", 6, curses.COLOR_BLUE, curses.COLOR_BLACK)
 }
-
 
 def init():
     if not found:
