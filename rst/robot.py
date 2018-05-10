@@ -1,15 +1,18 @@
 import copy
 from time import sleep
-from output.gui import render as gui_render
-from output.console import get_display, display
-from output.curses import render as curses_render
+from output.gui import GUI
+from output.console_plain import ConsolePlain
+from output.console_color import ConsoleColor
+from output.curses import ConsoleCurses
 from searches.follow_left import FollowLeft
+
 
 class Robot:
 
-    DISPLAY_CONSOLE = display
-    DISPLAY_CURSES = curses_render
-    DISPLAY_WINDOW = gui_render
+    DISPLAY_PLAIN = ConsolePlain
+    DISPLAY_COLOR = ConsoleColor
+    DISPLAY_CURSES = ConsoleCurses
+    DISPLAY_WINDOW = GUI
     DISPLAY_NONE = None
 
     def __init__(self, battleground, search = None, start = (0,0), goal = None, display_function=DISPLAY_NONE):
@@ -38,8 +41,11 @@ class Robot:
         else:
             self.goal_x = goal[0]
             self.goal_y = goal[1]
-        
-        self.display_function = display_function
+
+        if display_function is not None:
+            self.display = display_function()
+        else:
+            self.display = None
 
         # set the default search to be FollowLeft
         if search == None:
@@ -54,14 +60,13 @@ class Robot:
     def __str__(self):
         arr = self.battleground.get_view()
         arr[self.x][self.y] = -1
-        return get_display(arr)
+        return ConsolePlain.get_display(arr)
     
     def render(self):
-        if self.display_function is not None:
+        if self.display is not None:
             view = self.battleground.get_view()
             view[self.x][self.y] = -1
-            func = self.display_function
-            func(view)
+            self.display.render(view)
             sleep(0.2)
     
     # gets the robots view from the battleground

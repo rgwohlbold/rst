@@ -180,7 +180,7 @@ _ _ _ ^ _ _ _
 
             with redirect_stdout() as file:
                 battleground = Battleground(terrain=entry["terrain"])
-                robot = Robot(battleground, display_function=Robot.DISPLAY_CONSOLE)
+                robot = Robot(battleground, display_function=Robot.DISPLAY_COLOR)
                 robot.render()
             with open(file, 'r') as f:
                 self.assertEqual(f.read().strip(), entry["repr"].strip())
