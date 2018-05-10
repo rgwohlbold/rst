@@ -3,7 +3,8 @@ from time import sleep
 from output.gui import GUI
 from output.console_plain import ConsolePlain
 from output.console_color import ConsoleColor
-from output.curses import ConsoleCurses
+from output.curses_plain import ConsoleCursesPlain
+from output.curses_color import ConsoleCursesColor
 from searches.follow_left import FollowLeft
 
 
@@ -11,7 +12,8 @@ class Robot:
 
     DISPLAY_PLAIN = ConsolePlain
     DISPLAY_COLOR = ConsoleColor
-    DISPLAY_CURSES = ConsoleCurses
+    DISPLAY_CURSES_PLAIN = ConsoleCursesPlain
+    DISPLAY_CURSES_COLOR = ConsoleCursesColor
     DISPLAY_WINDOW = GUI
     DISPLAY_NONE = None
 
