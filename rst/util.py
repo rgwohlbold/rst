@@ -1,8 +1,9 @@
-import types
+import os
+import atexit
 import colorama
-import sys
-import io
+import tempfile
 from contextlib import contextmanager
+from contextlib import redirect_stdout as do_redirect
 
 colorama.init()
 escapes = list(colorama.Fore.__dict__.values()) + list(colorama.Back.__dict__.values())
@@ -12,12 +13,17 @@ def redirect_stdout():
     def uncolorized(self):
         return uncolorize(self.getvalue())
 
-    buffer = io.StringIO()
-    buffer.__setattr__("uncolorized", types.MethodType(uncolorized, buffer))
-    sys.stdout = buffer
-    yield buffer
-    sys.stdout = sys.__stdout__
-    buffer.close()
+    name = tempfile.mktemp('out', 'txt')
+    atexit.register(os.remove, name)
+
+    with open(name, 'w') as f:
+        with do_redirect(f):
+            yield name
+    with open(name, 'r') as f:
+        content = f.read()
+    with open(name, 'w') as f:
+        f.write(uncolorize(content))
+
 
 
 def uncolorize(s):

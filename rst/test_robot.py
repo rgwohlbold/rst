@@ -171,17 +171,16 @@ _ _ _ ^ _ _ _
     def test_robot_output(self):
 
         for entry in TestRobot.test_output_table:
-            with redirect_stdout() as buffer:
+            with redirect_stdout() as file:
                 battleground = Battleground(terrain=entry["terrain"])
                 robot = Robot(battleground)
                 print(robot)
-                s = buffer.uncolorized()
-            self.assertEqual(s.strip(), entry["repr"].strip())
+            with open(file, 'r') as f:
+                self.assertEqual(f.read().strip(), entry["repr"].strip())
 
-            with redirect_stdout() as buffer:
+            with redirect_stdout() as file:
                 battleground = Battleground(terrain=entry["terrain"])
                 robot = Robot(battleground, display_function=Robot.DISPLAY_CONSOLE)
                 robot.render()
-                s = buffer.uncolorized()
-            self.assertEqual(s.strip(), entry["repr"].strip())
-
+            with open(file, 'r') as f:
+                self.assertEqual(f.read().strip(), entry["repr"].strip())

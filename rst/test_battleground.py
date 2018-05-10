@@ -1,6 +1,6 @@
 import unittest
 from battleground import Battleground
-from util import redirect_stdout, empty, empty_repr
+from util import redirect_stdout
 
 
 class TestBattleground(unittest.TestCase):
@@ -114,10 +114,10 @@ _ _ O _ _ O _ _ _
                     raise RuntimeError("invalid test case")
 
                 if entry.get("repr") is not None:
-                    with redirect_stdout() as buffer:
+                    with redirect_stdout() as file:
                         print(battleground)
-                        s = buffer.uncolorized()
-                    self.assertEqual(s.strip(), entry["repr"].strip())
+                    with open(file, 'r') as f:
+                        self.assertEqual(f.read().strip(), entry["repr"].strip())
 
             except Exception as e:
                 if e.__class__ != entry.get("exception").__class__:
@@ -125,6 +125,5 @@ _ _ O _ _ O _ _ _
                 exception = e
             finally:
                 self.assertEqual(entry.get("exception").__class__, exception.__class__)
-
 
 
