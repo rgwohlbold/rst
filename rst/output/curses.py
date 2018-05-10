@@ -1,33 +1,25 @@
 import atexit
 
 
-def module_exists(module_name):
-    try:
-        __import__(module_name)
-    except ImportError:
-        return False
-    else:
-        return True
+initialized = False
+found = True
+try:
+    __import__("curses")
+except ImportError:
+    found = False
 
-
-found = False
-if module_exists("curses"):
-    found = True
+if found:
     import curses
 
+    config = {
+        -1: ("=", 1, curses.COLOR_CYAN, curses.COLOR_BLACK),
+        0: ("_", 2, curses.COLOR_WHITE, curses.COLOR_BLACK),
+        1: ("#", 3, curses.COLOR_WHITE, curses.COLOR_BLACK),
+        2: ("O", 4, curses.COLOR_RED, curses.COLOR_BLACK),
+        3: ("^", 5, curses.COLOR_GREEN, curses.COLOR_BLACK),
+        "all": ("^", 6, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    }
 
-initialized = False
-stdscr = None
-last = [[-5] * 9] * 8
-
-config = {
-    -1: ("=", 1, curses.COLOR_CYAN, curses.COLOR_BLACK),
-    0: ("_", 2, curses.COLOR_WHITE, curses.COLOR_BLACK),
-    1: ("#", 3, curses.COLOR_WHITE, curses.COLOR_BLACK),
-    2: ("O", 4, curses.COLOR_RED, curses.COLOR_BLACK),
-    3: ("^", 5, curses.COLOR_GREEN, curses.COLOR_BLACK),
-    "all": ("^", 6, curses.COLOR_BLUE, curses.COLOR_BLACK)
-}
 
 def init():
     if not found:
