@@ -60,6 +60,27 @@ _ _ _ _ _ _ _
 _ _ _ _ _ _ _ 
 """
 
+    narrow_terrain = [
+        [0,0,0,0,0,0,0],
+        [0,3,3,3,3,3,3],
+        [0,3,0,0,0,0,0],
+        [0,3,0,3,3,3,0],
+        [0,3,0,3,0,0,0],
+        [0,3,0,3,0,3,3],
+        [0,0,0,3,0,0,0]
+    ]
+
+    narrow_terrain_repr = """
+= _ _ _ _ _ _ 
+_ ^ ^ ^ ^ ^ ^ 
+_ ^ _ _ _ _ _ 
+_ ^ _ ^ ^ ^ _ 
+_ ^ _ ^ _ _ _ 
+_ ^ _ ^ _ ^ ^ 
+_ _ _ ^ _ _ _ 
+"""
+
+
     test_behaviour_table = [
         {
             "terrain": small_terrain,
@@ -95,6 +116,13 @@ _ _ _ _ _ _ _
             "solvable": False,
             "moves_left": 16,
             "moves_right": 16,
+        },
+        {
+            "terrain": narrow_terrain,
+            "goal": None,
+            "solvable": True,
+            "moves_left": 36,
+            "moves_right": 24,
         }
     ]
 

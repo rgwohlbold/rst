@@ -6,8 +6,34 @@ class FollowSide(Search):
         super().__init__()
         self.direction = direction
         self.state = 0
+        self.initialized = False
+
+    def _init_with_robot(self):
+        """
+        Initializes the search when self.robot is available, call this only once
+        Sets self.initialized to True
+        """
+
+        # Put all valid adjacent fields of the starting positions into self.adjacent
+        self.adjacent = []
+        if self.rob.battleground.in_bounds(self.rob.start_x - 1,self.rob.start_y):
+            self.adjacent.append((self.rob.start_x - 1, self.rob.start_y))
+
+        if self.rob.battleground.in_bounds(self.rob.start_x, self.rob.start_y - 1):
+            self.adjacent.append((self.rob.start_x, self.rob.start_y - 1))
+
+        if self.rob.battleground.in_bounds(self.rob.start_x + 1, self.rob.start_y):
+            self.adjacent.append((self.rob.start_x + 1, self.rob.start_y))
+
+        if self.rob.battleground.in_bounds(self.rob.start_x, self.rob.start_y + 1):
+            self.adjacent.append((self.rob.start_x, self.rob.start_y + 1))
+
+        self.initialized = True
 
     def tick(self):
+        if not self.initialized:
+            self._init_with_robot()
+
         # represents the movements of different states.
         def get_coord(state, x = self.rob.x, y = self.rob.y):
             #        down   left   up   right
@@ -18,9 +44,8 @@ class FollowSide(Search):
             ret[1] += y
             return ret
 
-        # isn't solveable, we currently assume that we start in the top left corner
-        # TODO make it possible to start in another corner and still detect unsolvability
-        if self.rob.x == self.rob.start_x and self.rob.y == self.rob.start_y and self.moves != 0 and self.state in (1,2):
+        # it isn't solvable if we are on our starting positions, we have moved and visited every adjacent field
+        if self.rob.x == self.rob.start_x and self.rob.y == self.rob.start_y and self.moves != 0 and len(self.adjacent) == 0:
             return False
 
         self.state = (self.state + 4) % 4
@@ -43,5 +68,9 @@ class FollowSide(Search):
                 self.inc_moves()
             else:
                 self.state -= self.direction
+
+        # Remove current position from self.adjacent to signal that we already visited this position
+        if (self.rob.x, self.rob.y) in self.adjacent:
+            self.adjacent.remove((self.rob.x, self.rob.y))
         # step went well
         return True
