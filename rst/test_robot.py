@@ -2,6 +2,9 @@ import unittest
 from util import redirect_stdout
 from battleground import Battleground
 from robot import Robot
+from searches.follow_right import FollowRight
+from searches.follow_left  import FollowLeft
+from searches.dfs import DFS
 
 
 class TestRobot(unittest.TestCase):
@@ -121,20 +124,20 @@ _ _ _ _ _ _ _
                 goal = entry["goal"]
 
             battleground = Battleground(terrain=entry["terrain"])
-            robot = Robot(battleground, goal=entry["goal"])
-            self.assertEqual(robot.dfs(), entry["solvable"])
+            robot = Robot(battleground, search=DFS(), goal=entry["goal"])
+            self.assertEqual(robot.run(), entry["solvable"])
             self.assertEqual(goal, (robot.x, robot.y))
 
             battleground = Battleground(terrain=entry["terrain"])
-            robot = Robot(battleground, goal=entry["goal"])
-            self.assertEqual(robot.follow_left(), entry["solvable"])
-            self.assertEqual(robot.moves, entry["moves_left"])
+            robot = Robot(battleground, search=FollowLeft(), goal=entry["goal"])
+            self.assertEqual(robot.run(), entry["solvable"])
+            self.assertEqual(robot.moves(), entry["moves_left"])
             self.assertEqual(goal, (robot.x, robot.y))
 
             battleground = Battleground(terrain=entry["terrain"])
-            robot = Robot(battleground, goal=entry["goal"])
-            self.assertEqual(robot.follow_right(), entry["solvable"])
-            self.assertEqual(robot.moves, entry["moves_right"])
+            robot = Robot(battleground, search=FollowRight(), goal=entry["goal"])
+            self.assertEqual(robot.run(), entry["solvable"])
+            self.assertEqual(robot.moves(), entry["moves_right"])
             self.assertEqual(goal, (robot.x, robot.y))
 
     def test_robot_output(self):

@@ -10,7 +10,7 @@ class FollowSide(Search):
     def tick(self):
         # represents the movements of different states.
         def get_coord(state, x = self.rob.x, y = self.rob.y):
-            #        up    left   down   right
+            #        down   left   up   right
             wheel = [[0,1],[-1,0],[0,-1],[1,0]]
             state = (state + 4) % 4
             ret = wheel[state]
@@ -18,10 +18,10 @@ class FollowSide(Search):
             ret[1] += y
             return ret
 
-        # isn't solveable
-        if self.rob.x == self.rob.start_x and self.rob.y == self.rob.start_y and self.moves != 0 and self.state == 0:
-            pass
-            #return False
+        # isn't solveable, we currently assume that we start in the top left corner
+        # TODO make it possible to start in another corner and still detect unsolvability
+        if self.rob.x == self.rob.start_x and self.rob.y == self.rob.start_y and self.moves != 0 and self.state in (1,2):
+            return False
 
         self.state = (self.state + 4) % 4
         view = self.rob.get_view()
