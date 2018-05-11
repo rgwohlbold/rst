@@ -1,15 +1,16 @@
 from searches.search import Search
 
+
 class DFS(Search):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, rob):
+        super().__init__(rob)
         self.visited = None
-        self.stack   = []
+        self.stack = []
 
     def tick(self):
 
-        if self.visited == None:
+        if self.visited is None:
             self.visited = [[False for x in range(self.rob.battleground.n)] for y in range(self.rob.battleground.m)]
 
         self.visited[self.rob.x][self.rob.y] = True

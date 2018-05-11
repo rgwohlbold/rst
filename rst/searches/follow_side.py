@@ -2,8 +2,8 @@ from searches.search import Search
 
 class FollowSide(Search):
 
-    def __init__(self, direction):
-        super().__init__()
+    def __init__(self, rob, direction):
+        super().__init__(rob)
         self.direction = direction
         self.state = 0
         self.initialized = False
