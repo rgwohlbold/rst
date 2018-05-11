@@ -1,7 +1,7 @@
 import unittest
 import pygame
 from functools import partial
-import output.gui as gui
+from output.gui import GUI
 
 
 class TestGUI(unittest.TestCase):
@@ -18,12 +18,13 @@ class TestGUI(unittest.TestCase):
     ]
 
     def test_gui_errors_with_init(self):
-        gui.init()
+        gui = GUI()
         gui.render(self.battleground)
         pygame.event.post(pygame.event.Event(pygame.QUIT))
         gui.render(self.battleground, on_exit=None)
 
     def test_gui_errors_without_init(self):
+        gui = GUI()
         gui.render(self.battleground)
         pygame.event.post(pygame.event.Event(pygame.QUIT))
         gui.render(self.battleground, on_exit=None)
@@ -35,7 +36,7 @@ class TestGUI(unittest.TestCase):
             self.i += 1
 
         func = partial(callback, self)
-        gui.init()
+        gui = GUI()
         pygame.event.post(pygame.event.Event(pygame.QUIT))
         gui.render(self.battleground, on_exit=func)
         self.assertEqual(self.i, 1)

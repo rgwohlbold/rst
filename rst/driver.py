@@ -17,7 +17,7 @@ view = [
 
 ground = Battleground(view=view)
 
-# ncurses or console.py output
+# console, gui or ncurses or output
 for search in [DFS, FollowRight, FollowLeft]:
-    robot = Robot(ground, search(), display_function=Robot.DISPLAY_CONSOLE)
+    robot = Robot(ground, search(), display_function=Robot.DISPLAY_COLOR)
     robot.run()

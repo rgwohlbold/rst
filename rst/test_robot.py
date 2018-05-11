@@ -2,6 +2,9 @@ import unittest
 from util import redirect_stdout
 from battleground import Battleground
 from robot import Robot
+from searches.follow_right import FollowRight
+from searches.follow_left  import FollowLeft
+from searches.dfs import DFS
 
 
 class TestRobot(unittest.TestCase):
@@ -57,6 +60,27 @@ _ _ _ _ _ _ _
 _ _ _ _ _ _ _ 
 """
 
+    narrow_terrain = [
+        [0,0,0,0,0,0,0],
+        [0,3,3,3,3,3,3],
+        [0,3,0,0,0,0,0],
+        [0,3,0,3,3,3,0],
+        [0,3,0,3,0,0,0],
+        [0,3,0,3,0,3,3],
+        [0,0,0,3,0,0,0]
+    ]
+
+    narrow_terrain_repr = """
+= _ _ _ _ _ _ 
+_ ^ ^ ^ ^ ^ ^ 
+_ ^ _ _ _ _ _ 
+_ ^ _ ^ ^ ^ _ 
+_ ^ _ ^ _ _ _ 
+_ ^ _ ^ _ ^ ^ 
+_ _ _ ^ _ _ _ 
+"""
+
+
     test_behaviour_table = [
         {
             "terrain": small_terrain,
@@ -92,6 +116,13 @@ _ _ _ _ _ _ _
             "solvable": False,
             "moves_left": 16,
             "moves_right": 16,
+        },
+        {
+            "terrain": narrow_terrain,
+            "goal": None,
+            "solvable": True,
+            "moves_left": 36,
+            "moves_right": 24,
         }
     ]
 
@@ -121,36 +152,35 @@ _ _ _ _ _ _ _
                 goal = entry["goal"]
 
             battleground = Battleground(terrain=entry["terrain"])
-            robot = Robot(battleground, goal=entry["goal"])
-            self.assertEqual(robot.dfs(), entry["solvable"])
+            robot = Robot(battleground, search=DFS(), goal=entry["goal"])
+            self.assertEqual(robot.run(), entry["solvable"])
             self.assertEqual(goal, (robot.x, robot.y))
 
             battleground = Battleground(terrain=entry["terrain"])
-            robot = Robot(battleground, goal=entry["goal"])
-            self.assertEqual(robot.follow_left(), entry["solvable"])
-            self.assertEqual(robot.moves, entry["moves_left"])
+            robot = Robot(battleground, search=FollowLeft(), goal=entry["goal"])
+            self.assertEqual(robot.run(), entry["solvable"])
+            self.assertEqual(robot.moves(), entry["moves_left"])
             self.assertEqual(goal, (robot.x, robot.y))
 
             battleground = Battleground(terrain=entry["terrain"])
-            robot = Robot(battleground, goal=entry["goal"])
-            self.assertEqual(robot.follow_right(), entry["solvable"])
-            self.assertEqual(robot.moves, entry["moves_right"])
+            robot = Robot(battleground, search=FollowRight(), goal=entry["goal"])
+            self.assertEqual(robot.run(), entry["solvable"])
+            self.assertEqual(robot.moves(), entry["moves_right"])
             self.assertEqual(goal, (robot.x, robot.y))
 
     def test_robot_output(self):
 
         for entry in TestRobot.test_output_table:
-            with redirect_stdout() as buffer:
+            with redirect_stdout() as file:
                 battleground = Battleground(terrain=entry["terrain"])
                 robot = Robot(battleground)
                 print(robot)
-                s = buffer.uncolorized()
-            self.assertEqual(s.strip(), entry["repr"].strip())
+            with open(file, 'r') as f:
+                self.assertEqual(f.read().strip(), entry["repr"].strip())
 
-            with redirect_stdout() as buffer:
+            with redirect_stdout() as file:
                 battleground = Battleground(terrain=entry["terrain"])
-                robot = Robot(battleground, display_function=Robot.DISPLAY_CONSOLE)
+                robot = Robot(battleground, display_function=Robot.DISPLAY_COLOR)
                 robot.render()
-                s = buffer.uncolorized()
-            self.assertEqual(s.strip(), entry["repr"].strip())
-
+            with open(file, 'r') as f:
+                self.assertEqual(f.read().strip(), entry["repr"].strip())

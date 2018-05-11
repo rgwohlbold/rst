@@ -3,7 +3,7 @@ import random
 import itertools
 from convex_hull import get_all_vertices, graham_scan
 from polygon import interpolate
-from output.console import get_display
+from output.console_plain import ConsolePlain
 
 
 
@@ -131,7 +131,7 @@ class Battleground(object):
                                  .format(name, len(row), i, self.n))
 
     def __str__(self):
-        return get_display(self.terrain)
+        return ConsolePlain.get_display(self.terrain)
 
     def get_view(self, i1=-1, j1=-1, interfere=False, birdseye=True):
         """
