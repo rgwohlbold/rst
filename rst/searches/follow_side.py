@@ -33,6 +33,10 @@ class FollowSide(Search):
     def tick(self):
         if not self.initialized:
             self._init_with_robot()
+       
+        # it isn't solvable if we are on our starting positions, we have moved and visited every adjacent field
+        if self.rob.x == self.rob.start_x and self.rob.y == self.rob.start_y and self.moves != 0 and len(self.adjacent) == 0:
+            return False
 
         # represents the movements of different states.
         def get_coord(state, x = self.rob.x, y = self.rob.y):
