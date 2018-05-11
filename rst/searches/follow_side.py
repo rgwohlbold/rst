@@ -44,10 +44,6 @@ class FollowSide(Search):
             ret[1] += y
             return ret
 
-        # it isn't solvable if we are on our starting positions, we have moved and visited every adjacent field
-        if self.rob.x == self.rob.start_x and self.rob.y == self.rob.start_y and self.moves != 0 and len(self.adjacent) == 0:
-            return False
-
         self.state = (self.state + 4) % 4
         view = self.rob.get_view()
         # if the block beneath me is open, move down, else if it is closed, if the front is open move their
