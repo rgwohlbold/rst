@@ -6,15 +6,9 @@ class FollowSide(Search):
         super().__init__(rob)
         self.direction = direction
         self.state = 0
-        self.initialized = False
-
-    def _init_with_robot(self):
-        """
-        Initializes the search when self.robot is available, call this only once
-        Sets self.initialized to True
-        """
 
         # Put all valid adjacent fields of the starting positions into self.adjacent
+        # So that we can tell when the battleground is unsolvable
         self.adjacent = []
         if self.rob.battleground.in_bounds(self.rob.start_x - 1,self.rob.start_y):
             self.adjacent.append((self.rob.start_x - 1, self.rob.start_y))
@@ -28,11 +22,8 @@ class FollowSide(Search):
         if self.rob.battleground.in_bounds(self.rob.start_x, self.rob.start_y + 1):
             self.adjacent.append((self.rob.start_x, self.rob.start_y + 1))
 
-        self.initialized = True
 
     def tick(self):
-        if not self.initialized:
-            self._init_with_robot()
        
         # it isn't solvable if we are on our starting positions, we have moved and visited every adjacent field
         if self.rob.x == self.rob.start_x and self.rob.y == self.rob.start_y and self.moves != 0 and len(self.adjacent) == 0:
