@@ -64,9 +64,12 @@ class FollowSide(Search):
                 self.inc_moves()
             else:
                 self.state -= self.direction
+                # just updated orientation and havn't moved, so 'tick' again
+                return self.tick()
 
         # Remove current position from self.adjacent to signal that we already visited this position
         if (self.rob.x, self.rob.y) in self.adjacent:
             self.adjacent.remove((self.rob.x, self.rob.y))
+
         # step went well
         return True
