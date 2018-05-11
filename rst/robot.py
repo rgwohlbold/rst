@@ -6,6 +6,8 @@ from output.console_color import ConsoleColor
 from output.curses_plain import ConsoleCursesPlain
 from output.curses_color import ConsoleCursesColor
 from searches.follow_left import FollowLeft
+from searches.follow_right import FollowRight
+from searches.dfs import DFS
 
 
 class Robot:
@@ -17,13 +19,19 @@ class Robot:
     DISPLAY_WINDOW = GUI
     DISPLAY_NONE = None
 
-    def __init__(self, battleground, search = None, start = (0,0), goal = None, display_function=DISPLAY_NONE):
+    SEARCH_DFS = DFS
+    SEARCH_FOLLOW_LEFT = FollowLeft
+    SEARCH_FOLLOW_RIGHT = FollowRight
+
+    def __init__(self, battleground, search=SEARCH_FOLLOW_LEFT, start=(0,0), goal=None, display=DISPLAY_NONE, speed=0.2):
         """
         Initializes the robot
         :param battleground: The battleground object
+        :param search: An uninitialized Search class
         :param start: starting position
         :param goal: goal position
-        :param display_function: function taking in terrain that is called every time the terrain is modified
+        :param display_function: An unintialized Renderer class
+        :param speed: Interval between render steps (if display is not None)
         """
         self.battleground = battleground
 
@@ -44,19 +52,15 @@ class Robot:
             self.goal_x = goal[0]
             self.goal_y = goal[1]
 
-        if display_function is not None:
-            self.display = display_function()
+        if display is not None:
+            self.display = display()
         else:
             self.display = None
+        self.speed = speed
 
-        # set the default search to be FollowLeft
-        if search == None:
-            #TODO:: PUT the best as default
-            self.search = FollowLeft()
-        else:
-            self.search = search
-        # give the search
-        self.search.rob = self
+        # TODO specify best as default
+        if search is not None:
+            self.search = search(self)
 
     # string method, returns the battlefield with the robot marked on it.
     def __str__(self):
@@ -69,7 +73,7 @@ class Robot:
             view = self.battleground.get_view()
             view[self.x][self.y] = -1
             self.display.render(view)
-            sleep(0.2)
+            sleep(self.speed)
     
     # gets the robots view from the battleground
     def get_view(self):

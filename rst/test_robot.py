@@ -152,18 +152,18 @@ _ _ _ ^ _ _ _
                 goal = entry["goal"]
 
             battleground = Battleground(terrain=entry["terrain"])
-            robot = Robot(battleground, search=DFS(), goal=entry["goal"])
+            robot = Robot(battleground, search=Robot.SEARCH_DFS, goal=entry["goal"])
             self.assertEqual(robot.run(), entry["solvable"])
             self.assertEqual(goal, (robot.x, robot.y))
 
             battleground = Battleground(terrain=entry["terrain"])
-            robot = Robot(battleground, search=FollowLeft(), goal=entry["goal"])
+            robot = Robot(battleground, search=Robot.SEARCH_FOLLOW_LEFT, goal=entry["goal"])
             self.assertEqual(robot.run(), entry["solvable"])
             self.assertEqual(robot.moves(), entry["moves_left"])
             self.assertEqual(goal, (robot.x, robot.y))
 
             battleground = Battleground(terrain=entry["terrain"])
-            robot = Robot(battleground, search=FollowRight(), goal=entry["goal"])
+            robot = Robot(battleground, search=Robot.SEARCH_FOLLOW_RIGHT, goal=entry["goal"])
             self.assertEqual(robot.run(), entry["solvable"])
             self.assertEqual(robot.moves(), entry["moves_right"])
             self.assertEqual(goal, (robot.x, robot.y))
@@ -180,7 +180,7 @@ _ _ _ ^ _ _ _
 
             with redirect_stdout() as file:
                 battleground = Battleground(terrain=entry["terrain"])
-                robot = Robot(battleground, display_function=Robot.DISPLAY_COLOR)
+                robot = Robot(battleground, display=Robot.DISPLAY_COLOR)
                 robot.render()
             with open(file, 'r') as f:
                 self.assertEqual(f.read().strip(), entry["repr"].strip())

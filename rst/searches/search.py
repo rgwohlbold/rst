@@ -3,11 +3,11 @@ import time
 
 class Search:
 
-    def __init__(self):
+    def __init__(self, rob):
         # shouldn't be used as a means for output,
         # this is for debuging other gui output methods. 
         self.debug = False
-        self.rob = None
+        self.rob = rob
         self.moves = 0
 
     # run one step of the search algorithm
