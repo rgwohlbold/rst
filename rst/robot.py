@@ -7,6 +7,7 @@ from output.curses_plain import ConsoleCursesPlain
 from output.curses_color import ConsoleCursesColor
 from searches.follow_left import FollowLeft
 from searches.follow_right import FollowRight
+from searches.random import Random
 from searches.dfs import DFS
 
 
@@ -22,6 +23,7 @@ class Robot:
     SEARCH_DFS = DFS
     SEARCH_FOLLOW_LEFT = FollowLeft
     SEARCH_FOLLOW_RIGHT = FollowRight
+    SEARCH_RANDOM = Random
 
     def __init__(self, battleground, search=SEARCH_FOLLOW_LEFT, start=(0,0), goal=None, display=DISPLAY_NONE, speed=0.2):
         """

@@ -19,5 +19,5 @@ ground = Battleground(view=view)
 
 # console, gui or ncurses or output
 for search in [Robot.SEARCH_DFS, Robot.SEARCH_FOLLOW_LEFT, Robot.SEARCH_FOLLOW_RIGHT]:
-    robot = Robot(ground, search=search, display_function=Robot.DISPLAY_COLOR)
+    robot = Robot(ground, search=search, display=Robot.DISPLAY_COLOR)
     robot.run()

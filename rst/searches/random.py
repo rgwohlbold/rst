@@ -1,6 +1,7 @@
 from searches.search import Search
 from random import randint
 
+
 class Random(Search):    
     def tick(self):
         directions = [(0,1), (1,0), (-1,0), (0,-1)]
@@ -16,4 +17,3 @@ class Random(Search):
             return self.tick()
         
         return True
-        
