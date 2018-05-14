@@ -1,9 +1,6 @@
 from robot import Robot
 from battleground import Battleground
-
-from searches.follow_right import FollowRight
-from searches.follow_left  import FollowLeft
-from searches.dfs import DFS
+import argparse
 
 view = [
     [1, 1, 0, 1, 1, 1, 1, 1, 0],
@@ -15,9 +12,20 @@ view = [
     [0, 1, 3, 1, 1, 2, 1, 1, 1],
     [1, 0, 2, 0, 1, 2, 1, 1, 1]]
 
-ground = Battleground(view=view)
 
-# console, gui or ncurses or output
-for search in [Robot.SEARCH_DFS, Robot.SEARCH_FOLLOW_LEFT, Robot.SEARCH_FOLLOW_RIGHT]:
-    robot = Robot(ground, search=search, display=Robot.DISPLAY_COLOR)
-    robot.run()
+search_choices = list(map(lambda x: x[7:].lower(), filter(lambda x: x.startswith("SEARCH_"), Robot.__dict__.keys())))
+display_choices = list(map(lambda x: x[8:].lower(), filter(lambda x: x.startswith("DISPLAY_"), Robot.__dict__.keys())))
+
+parser = argparse.ArgumentParser()
+#parser.add_argument("-v", "--verbose", help="show additional information on runtime", action="count")
+#parser.add_argument("-f", "--file", help="load terrain from a file")
+parser.add_argument("-o", "--output", help="which output method should be used", action="store", choices=display_choices, default="curses_color")
+parser.add_argument("-s", "--search", help="which search to perform", action="store", choices=search_choices, default="follow_left")
+
+args = parser.parse_args()
+search = Robot.__dict__["SEARCH_" + args.search.upper()]
+output = Robot.__dict__["DISPLAY_" + args.output.upper()]
+
+ground = Battleground(view=view)
+robot = Robot(ground, search=search, display=output)
+robot.run()
