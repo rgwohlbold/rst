@@ -10,6 +10,7 @@ from searches.follow_right import FollowRight
 from searches.random import Random
 from searches.random_frequency import RandomFrequency
 from searches.dfs import DFS
+from searches.random_dfs import RandomDFS
 
 
 class Robot:
@@ -26,6 +27,7 @@ class Robot:
     SEARCH_FOLLOW_RIGHT = FollowRight
     SEARCH_RANDOM = Random
     SEARCH_RANDOM_FREQUENCY = RandomFrequency
+    SEARCH_RANDOM_DFS = RandomDFS
 
     def __init__(self, battleground, search=SEARCH_FOLLOW_LEFT, start=(0,0), goal=None, display=DISPLAY_NONE, speed=0.2):
         """
@@ -38,7 +40,7 @@ class Robot:
         :param speed: Interval between render steps (if display is not None)
         """
         self.battleground = battleground
-
+        
         # the robot's position
         self.x = start[0]
         self.y = start[1]
