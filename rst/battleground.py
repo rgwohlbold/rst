@@ -19,7 +19,7 @@ class Battleground(object):
         elif m is not None and n is not None:
             # default fog_rate and hill_rates
             fog_rate = 0.6 if fog_rate is None else fog_rate
-            hill_rates = [0.3, 0.3] if hill_rates is None else hill_rates
+            hill_rates = [0.2, 0.2] if hill_rates is None else hill_rates
             # please supply parameters:
             # max_h: the maximum height of the mountain
             #
@@ -85,9 +85,9 @@ class Battleground(object):
         self.m = m
         self.n = n
 
-        self.terrain = [[0] * self.n] * self.m
+        self.terrain = [[0] * self.n for _ in range(self.m)]
 
-        self.fog = [[0] * self.n] * self.m
+        self.fog = [[0] * self.n for _ in range(self.m)]
         assert 0.0 <= fog_rate <= 1.0
         # add fog
         for r, c in random.sample(population=list(itertools.product(range(self.m), range(self.n))),
