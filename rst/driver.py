@@ -35,7 +35,7 @@ if args.quiet:
     level = log.ERROR
 if args.verbose == 1:
     level = log.DEBUG
-elif args.verbose >= 2:
+elif args.verbose != None and args.verbose >= 2:
     level = log.INFO
 log.basicConfig(format="%(levelname)s: %(message)s", level=level)
 
