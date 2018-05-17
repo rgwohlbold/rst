@@ -8,6 +8,7 @@ from output.curses_color import ConsoleCursesColor
 from searches.follow_left import FollowLeft
 from searches.follow_right import FollowRight
 from searches.random import Random
+from searches.random_frequency import RandomFrequency
 from searches.dfs import DFS
 
 
@@ -24,6 +25,7 @@ class Robot:
     SEARCH_FOLLOW_LEFT = FollowLeft
     SEARCH_FOLLOW_RIGHT = FollowRight
     SEARCH_RANDOM = Random
+    SEARCH_RANDOM_FREQUENCY = RandomFrequency
 
     def __init__(self, battleground, search=SEARCH_FOLLOW_LEFT, start=(0,0), goal=None, display=DISPLAY_NONE, speed=0.2):
         """
