@@ -36,3 +36,18 @@ def empty(m, n):
 
 def empty_repr(m, n):
     return ("_ " * n + "\n") * m
+
+def battleground_from_file(path, delimiter = " "):
+    terrain = []
+    for line in open(path):
+        # remove newlines and trailing spaces
+        line   = line.strip()
+        # split along the delimeter and remove empty strings
+        blocks = filter(lambda x : x != "", line.split(delimiter))
+        # turn the strings to ints
+        nums   = list(map(int, blocks))
+        # add the new row to the terrain
+        terrain.append(nums)
+    # return the constructed terrain
+    return terrain
+
