@@ -1,0 +1,130 @@
+\documentclass{beamer}
+
+\title{What did we do?}
+\author{Tenniel Miao, Spencer Robinson, Richard Wohlbold}
+\date{May 21 2018}
+
+\usepackage{geometry}
+\usepackage{colortbl}% http://ctan.org/pkg/xcolor
+
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+    \frametitle{Problem description (1)}
+    
+    \begin{itemize}
+        \item \textbf{Input}: Terrain matrix
+        \item \textbf{Intermediate}: Interpolated terrain matrix
+        \item \textbf{Problem}: Navigating the terrain with a robot
+        \item Different tiles:
+            \begin{itemize}
+                \item Normal terrain
+                \item Fog (hides the tile under it)
+                \item Pit (impassable; not interpolated)
+                \item Mountains (impassable; get interpolated)
+            \end{itemize}
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}
+    \frametitle{Problem description (2)}
+
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+        \hline
+            \cellcolor{black!10}1&\cellcolor{black!10}1&0&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&0\\
+        \hline
+            0&\cellcolor{black!10}1&\cellcolor{blue!25}4&\cellcolor{black!10}1&\cellcolor{red!25}2&\cellcolor{blue!25}4&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1\\
+        \hline  
+            \cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{red!25}2&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{blue!25}4&\cellcolor{black!10}1&\cellcolor{black!10}1\\
+        \hline    
+            \cellcolor{black!10}1&\cellcolor{red!25}2&\cellcolor{red!25}2&\cellcolor{blue!25}4&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{red!25}2\\
+        \hline
+            \cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{green!25}3&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{red!25}2\\
+        \hline
+            0&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{green!25}3&\cellcolor{black!10}1&\cellcolor{black!10}1\\
+        \hline
+            0&\cellcolor{black!10}1&\cellcolor{green!25}3&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{red!25}2&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1\\
+        \hline
+            \cellcolor{black!10}1&0&\cellcolor{red!25}2&0&\cellcolor{black!10}1&\cellcolor{red!25}2&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1\\              
+        \hline
+    \end{tabular}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Problem description (3)}
+
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+            \hline
+        \cellcolor{black!10}1&\cellcolor{black!10}1&0&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&0\\
+            \hline
+        0&\cellcolor{black!10}1&\cellcolor{blue!25}4&\cellcolor{blue!25}4&\cellcolor{blue!25}4&\cellcolor{blue!25}4&\cellcolor{blue!25}4&\cellcolor{black!10}1&\cellcolor{black!10}1\\
+            \hline  
+        \cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{blue!25}4&\cellcolor{blue!25}4&\cellcolor{blue!25}4&\cellcolor{blue!25}4&\cellcolor{blue!25}4&\cellcolor{black!10}1&\cellcolor{black!10}1\\
+            \hline    
+        \cellcolor{black!10}1&\cellcolor{red!25}2&\cellcolor{red!25}2&\cellcolor{blue!25}4&\cellcolor{blue!25}4&\cellcolor{blue!25}4&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{red!25}2\\
+            \hline
+        \cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{green!25}3&\cellcolor{green!25}3&\cellcolor{green!25}3&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{red!25}2\\
+            \hline
+        0&\cellcolor{black!10}1&\cellcolor{green!25}3&\cellcolor{green!25}3&\cellcolor{green!25}3&\cellcolor{green!25}3&\cellcolor{green!25}3&\cellcolor{black!10}1&\cellcolor{black!10}1\\
+            \hline
+        0&\cellcolor{black!10}1&\cellcolor{green!25}3&\cellcolor{green!25}3&\cellcolor{green!25}3&\cellcolor{red!25}2&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1\\
+            \hline
+        \cellcolor{black!10}1&0&\cellcolor{red!25}2&0&\cellcolor{black!10}1&\cellcolor{red!25}2&\cellcolor{black!10}1&\cellcolor{black!10}1&\cellcolor{black!10}1\\              
+            \hline
+    \end{tabular} 
+\end{frame}
+
+\begin{frame}
+    \frametitle{Creating the terrain}
+    \begin{itemize}
+        \item Different ideas, pretty complicated in practice
+            \begin{enumerate}
+                \item Finding the convex hull of the points
+                \item Drawing the lines
+                \item Filling all the tiles in the polygon
+            \end{enumerate}
+        \item Right now: Using scipy.ConvexHull, currently working on out own working solution
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Searching for the goal}
+    \begin{itemize}
+        \item Different search algorithms:
+            \begin{enumerate}
+                \item Depth-First Search
+                \item Follow-Side (Left or Right)
+                \item Different random algorithms
+            \end{enumerate}
+        \item Breadth-First Search not applicable
+        \item Code is very modular $\rightarrow$ easy to add new search algorithms
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Output}
+    \begin{itemize}
+        \item Different output options:
+            \begin{enumerate}
+                \item Plain or colored output
+                \item With or without ncurses
+                \item Rudimentary GUI output
+                \item No output
+            \end{enumerate}
+        \item Code is very modular $\rightarrow$ easy to add new output methods
+    \end{itemize}
+\end{frame}
+\begin{frame}
+    \frametitle{Demo}
+    \begin{itemize}
+        \item (Live demo)
+        \item Code under https://github.com/poshut/rst
+    \end{itemize}
+\end{frame}
+
+\end{document}
