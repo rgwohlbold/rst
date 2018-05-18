@@ -32,7 +32,7 @@ def uncolorize(s):
     return s
 
 def empty(m, n):
-    return [[0] * n] * m
+    return [[0 for x in  range(n)] for y in range(m)]
 
 def empty_repr(m, n):
     return ("_ " * n + "\n") * m
