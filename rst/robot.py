@@ -40,7 +40,7 @@ class Robot:
         :param speed: Interval between render steps (if display is not None)
         """
         self.battleground = battleground
-        
+
         # the robot's position
         self.x = start[0]
         self.y = start[1]
@@ -107,6 +107,7 @@ class Robot:
     def run(self):
         while self.tick():
             pass
+        self.display.__del__()
         return self.is_solved()
 
     # the number of steps the robot has taken
