@@ -5,8 +5,6 @@ from convex_hull import get_all_vertices, graham_scan
 from polygon import interpolate
 from output.console_plain import ConsolePlain
 
-
-
 DEBUG = False
 
 
@@ -19,7 +17,7 @@ class Battleground(object):
         elif m is not None and n is not None:
             # default fog_rate and hill_rates
             fog_rate = 0.6 if fog_rate is None else fog_rate
-            hill_rates = [0.2, 0.2] if hill_rates is None else hill_rates
+            hill_rates = [0.05, 0.03] if hill_rates is None else hill_rates
             # please supply parameters:
             # max_h: the maximum height of the mountain
             #
@@ -102,8 +100,9 @@ class Battleground(object):
 
         for h in range(2, len(hill_rates) + 2):
             rate = hill_rates[h - 2]
-            hills = list(itertools.product(range(self.m), range(self.n)))
-            for r, c in random.sample(population=hills, k=int(round(rate * self.m * self.n))):
+            hills = random.sample(population=list(itertools.product(range(self.m), range(self.n))),
+                                  k=int(round(rate * self.m * self.n)))
+            for r, c in hills:
                 self.terrain[r][c] = h
             if h != 2:
                 h_coordinates[h] = hills
