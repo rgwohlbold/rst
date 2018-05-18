@@ -18,9 +18,6 @@ search_choices = list(map(lambda x: x[7:].lower(), filter(lambda x: x.startswith
 display_choices = list(map(lambda x: x[8:].lower(), filter(lambda x: x.startswith("DISPLAY_"), Robot.__dict__.keys())))
 
 parser = argparse.ArgumentParser()
-log_group = parser.add_mutually_exclusive_group()
-log_group.add_argument("-v", "--verbose", help="show additional information on runtime", action="count")
-log_group.add_argument("-q", "--quiet", help="do not show warnings", action="store_true")
 #parser.add_argument("-f", "--file", help="load terrain from a file")
 parser.add_argument("-o", "--output", help="which output method should be used", action="store", choices=display_choices, default="curses_color")
 parser.add_argument("-s", "--search", help="which search to perform", action="store", choices=search_choices, default="follow_left")
@@ -28,16 +25,6 @@ parser.add_argument("-s", "--search", help="which search to perform", action="st
 args = parser.parse_args()
 search = Robot.__dict__["SEARCH_" + args.search.upper()]
 output = Robot.__dict__["DISPLAY_" + args.output.upper()]
-
-# Configure loglevel from arguments
-level = log.WARNING
-if args.quiet:
-    level = log.ERROR
-if args.verbose == 1:
-    level = log.DEBUG
-elif args.verbose != None and args.verbose >= 2:
-    level = log.INFO
-log.basicConfig(format="%(levelname)s: %(message)s", level=level)
 
 ground = Battleground(view=view)
 robot = Robot(ground, search=search, display=output)
