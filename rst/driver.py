@@ -36,5 +36,6 @@ else:
     ground = Battleground(view=view)
 
 robot = Robot(ground, search=search, display=output)
-robot.run()
+if not robot.run():
+    print("Terrain unsolvable")
 print("Moves: " + str(robot.moves()))
