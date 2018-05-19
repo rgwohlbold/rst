@@ -7,6 +7,7 @@
 \usepackage{geometry}
 \usepackage{colortbl}% http://ctan.org/pkg/xcolor
 
+\usetheme{Dresden}
 
 \begin{document}
 
@@ -17,7 +18,7 @@
     
     \begin{itemize}
         \item \textbf{Input}: Terrain matrix
-        \item \textbf{Intermediate}: Interpolated terrain matrix
+        \item \textbf{Intermediate step}: Interpolated terrain matrix
         \item \textbf{Problem}: Navigating the terrain with a robot
         \item Different tiles:
             \begin{itemize}
@@ -88,7 +89,7 @@
                 \item Drawing the lines
                 \item Filling all the tiles in the polygon
             \end{enumerate}
-        \item Right now: Using scipy.ConvexHull, currently working on out own working solution
+        \item Right now: Using scipy.ConvexHull, currently working on our own solution
     \end{itemize}
 \end{frame}
 
@@ -101,7 +102,7 @@
                 \item Follow-Side (Left or Right)
                 \item Different random algorithms
             \end{enumerate}
-        \item Breadth-First Search not applicable
+        \item Breadth-First Search not applicable $\rightarrow$ too much backtracking $\rightarrow$ inefficient
         \item Code is very modular $\rightarrow$ easy to add new search algorithms
     \end{itemize}
 \end{frame}
@@ -125,6 +126,25 @@
         \item (Live demo)
         \item Code under https://github.com/poshut/rst
     \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Conclusion}
+    \begin{itemize}
+        \item Very interesting to work on a project as a team
+        \item Algorithmic challenges
+        \item Software engineering challenges
+            \begin{itemize}
+                \item Code readability
+                \item Code maintainability
+                \item Consensus on how to write code
+                \item Writing tests
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+\center \huge Thank you for your attention!
 \end{frame}
 
 \end{document}
