@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from robot import Robot
 from battleground import Battleground
 from util import battleground_from_file
