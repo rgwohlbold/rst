@@ -107,7 +107,7 @@ class Robot:
     def run(self):
         while self.tick():
             pass
-        self.display.__del__()
+        self.display.__del__() if self.display is not None else None
         return self.is_solved()
 
     # the number of steps the robot has taken
